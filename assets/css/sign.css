@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Roboto&family=Mate+SC&display=swap');
+
+a{
+  text-decoration: none;
+}
+
+body {
+  background-image: url('../img/bg.jpg');
+  background-size: cover;
+}
+
+.container-signin {
+  background-color: #3b513e;
+  width: 27%;
+  margin-top: 14%;
+  margin-left: 35%;
+  padding: 10px 30px 20px 30px;
+}
+
+.container-signin h1,
+.container-signup h1 {
+  font-family: 'Sacramento', cursive;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+
+.container-signin h1 span,
+.container-signup h1 span {
+  font-family: 'Mate SC', serif;
+  color: #b2733e;
+}
+
+.container-signin span,
+.container-signup span {
+	color: white;
+}
+
+.input-group-text {
+  background-color: transparent;
+  border: none;
+}
+
+.form-control {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  border-radius: 0;
+}
+
+.btn-masuk {
+  background-color: #b2733e;
+  color: white;
+  border-radius: 0;
+  width: 100%;
+}
+
+.btn-masuk:hover {
+  background-color: rgba(178, 115, 62, .7);
+  color: white;
+}
+
+.form-signin {
+  font-family: 'Roboto', sans-serif;
+}
+
+.form-signin p {
+  margin-top: 3px;
+  font-size: 13px;
+  color: white;
+}
+
+.form-signin p a {
+  color: #b2733e;
+}
+
+.form-signin p a:hover {
+  color: rgba(178, 115, 62, .7);
+}
+
+.container-signup {
+	background-color: #3b513e;
+	width: 27%;
+	margin-top: 10%;
+	margin-left: 35%;
+	padding: 10px 30px 20px 30px;
+}
+
+.invalid-feedback {
+  margin-left: 44px;
+}
