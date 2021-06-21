@@ -76,6 +76,12 @@ class Main extends CI_Controller {
       redirect('main/signIn');
     }
   }
+
+  function signout()
+  {
+    $this->session->unset_userdata('');
+    redirect('main/signIn');
+  }
 }
 
 ?>

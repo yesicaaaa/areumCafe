@@ -12,6 +12,7 @@ class Admin extends CI_Controller{
   {
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'pegawai' => $this->db->get('user')->result_array(),
       'title' => 'Dashboard | Areum Cafe',
       'css'   => 'admin.css',
       'js'    => ''
@@ -19,23 +20,94 @@ class Admin extends CI_Controller{
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
-    $this->load->view('admin/index');
+    $this->load->view('admin/index', $data);
     $this->load->view('templates/footer', $data);
   }
 
   function pegawai()
   {
+    $this->form_validation->set_rules('nama', 'Nama', 'required');
+    $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
+    $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]');
+    $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
+
+    if($this->form_validation->run() == false){
+      $data = [
+        'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+        'pegawai' => $this->am->getDataPegawai(),
+        'hak_akses' => $this->db->get('hak_akses')->result_array(),
+        'title' => 'Pegawai | Areum Cafe',
+        'css'   => 'admin.css',
+        'js'    => 'pegawai_add.js'    
+      ];
+  
+      $this->load->view('templates/header', $data);
+      $this->load->view('templates/side-navbar', $data);
+      $this->load->view('admin/pegawai', $data);
+      $this->load->view('templates/footer', $data);
+    }else{
+      $this->am->add_pegawai();
+      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data pegawai berhasil ditambah.</div>');
+      redirect('admin/pegawai');
+    }
+  }
+
+  function pegawai_delete()
+  {
+    foreach($_POST['id'] as $id){
+      $this->am->pegawai_delete($id);
+    } 
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data pegawai berhasil dihapus.</div>');
+    redirect('admin/pegawai');
+  }
+
+  function getPegawaiRow()
+  {
+    $id_user = $this->input->post('id_user');
+    $user = $this->am->getPegawaiRow($id_user);
+
+    echo json_encode($user);
+  }
+
+  function editPegawai()
+  {
+    $this->form_validation->set_rules('nama', 'Nama', 'required');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
+    $this->form_validation->set_rules('hak_akses', 'Hak Akses', 'required');
+
+    if($this->form_validation->run() == false){
+      $data = [
+        'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+        'pegawai' => $this->am->getDataPegawai(),
+        'hak_akses' => $this->db->get('hak_akses')->result_array(),
+        'title' => 'Pegawai | Areum Cafe',
+        'css'   => 'admin.css',
+        'js'    => 'pegawai_add.js'
+      ];
+
+      $this->load->view('templates/header', $data);
+      $this->load->view('templates/side-navbar', $data);
+      $this->load->view('admin/pegawai', $data);
+      $this->load->view('templates/footer', $data);
+    } else {
+      $this->am->editPegawai();
+      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data pegawai berhasil diubah.</div>');
+      redirect('admin/pegawai');
+    }
+  }
+
+  function menuCafe()
+  {
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-      'pegawai' => $this->am->getDataPegawai(),
-      'title' => 'Pegawai | Areum Cafe',
+      'title' => 'Menu Cafe | Areum Cafe',
       'css'   => 'admin.css',
-      'js'    => ''    
+      'js'    => 'menuCafe.js'
     ];
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
-    $this->load->view('admin/pegawai', $data);
+    $this->load->view('admin/menu-cafe', $data);
     $this->load->view('templates/footer', $data);
   }
 }

@@ -25,7 +25,7 @@ nav {
   font-size: 40px;
   padding: 0;
   color: white !important;
-  position: sticky;
+  position: sticky !important;
 }
 
 .navbar-brand span {
@@ -80,8 +80,12 @@ nav {
 }
 
 .table {
-  margin-top: 30px;
-  width: 99%;
+  margin-left: -7px;
+  width: 101%;
+}
+
+.form-pegawai {
+  font-size: 12px;
 }
 
 .form-pegawai span{
@@ -90,4 +94,45 @@ nav {
 
 .form-tambah {
   background-color: #e3e8e9;
+  margin-left: -7px;
+  padding: 10px 0 2px 10px;
+}
+
+.form-tambah h6 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.col-tambah2 {
+  margin-left: 75px;
+}
+
+.form-pegawai input {
+  height: 30px;
+  margin-top: 10px;
+}
+
+.form-pegawai button {
+  padding: 5px;
+  margin: -20px 0 20px 901px;
+  font-size: 15px;
+}
+
+.alert {
+  padding: 5px !important;
+  margin: 0 0 0 -7px ;
+}
+
+label span {
+  color: red;
+}
+
+.divider-end {
+  margin-top: 140%;
+  border-bottom: 2px solid #3e5241;
+}
+
+.modal-content {
+  border-radius: 0px;
+  margin-top: 170px;
 }

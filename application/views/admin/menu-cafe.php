@@ -2,7 +2,7 @@
   <?= $this->session->flashdata('message'); ?>
   <div class="form-tambah">
     <h6>
-      Tambah Pegawai
+      Tambah Menu
       <span>
         <button class="badge bg-success" id="pegawai-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#tambahPegawaiCollapse" aria-expanded="false" aria-controls="tambahPegawaiCollapse">-</button>
       </span>
@@ -99,14 +99,6 @@
               <input type="email" class="form-control" id="emailEdit" name="email">
               <?= form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
-            <label for="aksesEdit">Hak Akses<span>*</span></label>
-            <select class="form-select" id="aksesEdit" name="hak_akses">
-              <option value="">Pilih Hak Akses</option>
-              <?php foreach ($hak_akses as $ha) : ?>
-                <option value="<?= $ha['id_hak_akses'] ?>"><?= $ha['nama_akses'] ?></option>
-              <?php endforeach; ?>
-            </select>
-            <?= form_error('hak_akses', '<div class="invalid-feedback">', '</div>'); ?>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -133,7 +125,6 @@
         $('#id_userEdit').val(data.id_user),
           $('#namaEdit').val(data.nama),
           $('#emailEdit').val(data.email),
-          $('#aksesEdit').val(data.hak_akses),
           $('#editPegawai').modal('show')
       }
     });
