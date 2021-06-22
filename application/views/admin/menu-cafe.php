@@ -4,40 +4,54 @@
     <h6>
       Tambah Menu
       <span>
-        <button class="badge bg-success" id="pegawai-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#tambahPegawaiCollapse" aria-expanded="false" aria-controls="tambahPegawaiCollapse">-</button>
+        <button class="badge bg-success" id="pegawai-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#tambahMenuCollapse" aria-expanded="false" aria-controls="tambahMenuCollapse">+</button>
       </span>
     </h6>
-    <form action="<?= base_url('admin/pegawai') ?>" method="post" class="form-pegawai " id="tambahPegawaiCollapse">
+    <form action="<?= base_url('admin/menuCafe') ?>" method="post" class="form-pegawai " id="tambahMenuCollapse" enctype="multipart/form-data">
       <div class="row" id="formAdd">
         <div class="col-md-5">
           <div class="mb-3 row">
-            <label for="inputNama" class="col-sm-2 col-form-label">Nama Lengkap<span>*</span></label>
+            <label for="nama" class="col-sm-2 col-form-label">Nama Menu<span>*</span></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="nama" id="inputNama" autocomplete="off" value="<?= set_value('nama') ?>">
+              <input type="text" class="form-control" name="nama" id="nama" autocomplete="off" value="<?= set_value('nama') ?>">
               <?= form_error('nama', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="inputEmail" class="col-sm-2 col-form-label">Email<span>*</span></label>
+            <label for="harga" class="col-sm-2 col-form-label">Harga<span>*</span></label>
             <div class="col-sm-10">
-              <input type="email" class="form-control" name="email" id="inputEmail" autocomplete="off" value="<?= set_value('email') ?>">
-              <?= form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
+              <input type="text" class="form-control" name="harga" id="harga" autocomplete="off" value="<?= set_value('harga') ?>" onkeypress="return event.charCode >=48 && event.charCode <=58">
+              <?= form_error('harga', '<div class="invalid-feedback">', '</div>'); ?>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi<span>*</span></label>
+            <div class="col-sm-10">
+              <textarea type="text" class="form-control" name="deskripsi" id="deskripsi" autocomplete="off"></textarea>
+              <?= form_error('deskripsi', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
           </div>
         </div>
         <div class="col-md-5 col-tambah2">
           <div class="mb-3 row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">Password<span>*</span></label>
+            <label for="foto" class="col-sm-2 col-form-label">Foto<span>*</span></label>
             <div class="col-sm-10">
-              <input type="password" class="form-control" name="password" id="inputPassword" required>
-              <?= form_error('password', '<div class="invalid-feedback">', '</div>'); ?>
+              <input type="file" class="form-control" name="foto" id="foto" autocomplete="off" value="<?= set_value('foto') ?>">
+              <?= form_error('foto', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="inputConfirmPassword" class="col-sm-2 col-form-label">Konfirmasi Password<span>*</span></label>
+            <label for="jenis" class="col-sm-2 col-form-label">Jenis Menu<span>*</span></label>
             <div class="col-sm-10">
-              <input type="password" class="form-control" name="confirm_password" id="inputConfirmPassword" required>
-              <?= form_error('confirm_password', '<div class="invalid-feedback">', '</div>'); ?>
+              <input type="text" class="form-control" name="jenis" id="jenis" autocomplete="off" value="<?= set_value('jenis') ?>">
+              <?= form_error('jenis', '<div class="invalid-feedback">', '</div>'); ?>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="stok" class="col-sm-2 col-form-label">Stok<span>*</span></label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" name="stok" id="stok" autocomplete="off" value="<?= set_value('stok') ?>">
+              <?= form_error('stok', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
           </div>
         </div>
@@ -50,54 +64,87 @@
       <tr>
         <th scope="col"></th>
         <th scope="col">#</th>
-        <th scope="col">Nama Lengkap</th>
-        <th scope="col">Email</th>
-        <th scope="col">Hak Akses</th>
+        <th scope="col">Nama Menu</th>
+        <th scope="col">Harga</th>
+        <th scope="col" width="30%">Deskripsi</th>
+        <th scope="col" width="10%">Foto</th>
+        <th scope="col">Jenis</th>
+        <th scope="col">Stok</th>
         <th scope="col">Aksi</th>
       </tr>
     </thead>
     <tbody>
-      <form action="<?= base_url() ?>admin/pegawai_delete" method="post">
+      <form action="<?= base_url() ?>admin/menu_delete" method="post">
         <?php $i = 1 ?>
-        <?php foreach ($pegawai as $p) : ?>
+        <?php foreach ($menu as $m) : ?>
           <tr>
             <td>
-              <input type="checkbox" name="id[]" value="<?= $p['id_user'] ?>">
+              <input type="checkbox" name="id[]" value="<?= $m['id_menu'] ?>">
             </td>
             <th scope="row"><?= $i++ ?></th>
-            <td><?= $p['nama'] ?></td>
-            <td><?= $p['email'] ?></td>
-            <td><?= $p['nama_akses'] ?></td>
+            <td><?= $m['nama'] ?></td>
+            <td><?= $m['harga'] ?></td>
+            <td><?= $m['deskripsi'] ?></td>
             <td>
-              <a href="javascript:getData(<?= $p['id_user'] ?>);" class="badge bg-success">Edit</a>
+            <img src="<?= base_url('assets/img/menu/') . $m['foto'] ?>" alt="menu" width="90%">
+            </td>
+            <td><?= $m['jenis'] ?></td>
+            <td><?= $m['stok'] ?></td>
+            <td>
+              <a href="javascript:getData(<?= $m['id_menu'] ?>);" class="badge bg-success">Edit</a>
             </td>
           </tr>
         <?php endforeach; ?>
     </tbody>
   </table>
+  <?php if ($menu == null) : ?>
+    <div class="alert alert-danger" role="alert">
+      Tidak ada data!
+    </div>
+  <?php endif; ?>
   <button type="submit" class="btn btn-danger my-2" onclick="return confirm('Yakin ingin menghapus?')"><i class="fa fa-fw fa-minus-circle"></i> Hapus</button>
   </form>
 
   <!-- modal edit pegawai -->
-  <div class="modal" id="editPegawai" tabindex="-1">
+  <div class="modal" id="editMenu" tabindex="-1">
     <div class="modal-dialog">
-      <form action="<?= base_url() ?>admin/editPegawai" method="POST">
+      <form action="<?= base_url() ?>admin/editMenu" method="POST" enctype="multipart/form-data">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit Data Pegawai</h5>
+            <h5 class="modal-title">Edit Data Menu</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <input type="hidden" id="id_userEdit" name="id_user">
+            <input type="hidden" id="id_menuEdit" name="id_menu">
             <div class="form-group">
-              <label for="namaEdit">Nama<span>*</span></label>
+              <label for="namaEdit">Nama Menu<span>*</span></label>
               <input type="text" class="form-control" id="namaEdit" name="nama">
               <?= form_error('nama', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
             <div class="form-group">
-              <label for="emailEdit">Email<span>*</span></label>
-              <input type="email" class="form-control" id="emailEdit" name="email">
-              <?= form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
+              <label for="hargaEdit">Harga Menu<span>*</span></label>
+              <input type="text" class="form-control" id="hargaEdit" name="harga" onkeypress="return event.charCode >= 48 && event.charCode <= 58">
+              <?= form_error('harga', '<div class="invalid-feedback">', '</div>'); ?>
+            </div>
+            <div class="form-group">
+              <label for="deskripsiEdit">Deskripsi<span>*</span></label>
+              <textarea type="text" class="form-control" id="deskripsiEdit" name="deskripsi"></textarea>
+              <?= form_error('deskripsi', '<div class="invalid-feedback">', '</div>'); ?>
+            </div>
+            <div class="form-group">
+              <label for="fotoEdit">Foto<span>*</span></label>
+              <input type="file" class="form-control" id="fotoEdit" name="foto">
+              <?= form_error('foto', '<div class="invalid-feedback">', '</div>'); ?>
+            </div>
+            <div class="form-group">
+              <label for="jenisEdit">Jenis Menu<span>*</span></label>
+              <input type="text" class="form-control" id="jenisEdit" name="jenis">
+              <?= form_error('jenis', '<div class="invalid-feedback">', '</div>'); ?>
+            </div>
+            <div class="form-group">
+              <label for="stokEdit">Stok<span>*</span></label>
+              <input type="text" class="form-control" id="stokEdit" name="stok">
+              <?= form_error('stok', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
           </div>
           <div class="modal-footer">
@@ -113,18 +160,22 @@
 <script>
   var base_url = '<?= base_url(); ?>';
 
-  function getData(id_user) {
+  function getData(id_menu) {
     $.ajax({
       type: 'POST',
       dataType: 'json',
-      url: base_url + 'admin/getPegawaiRow',
+      url: base_url + 'admin/getMenuRow',
       data: {
-        id_user: id_user
+        id_menu: id_menu
       },
       success: function(data) {
-        $('#id_userEdit').val(data.id_user),
+        $('#id_menuEdit').val(data.id_menu),
           $('#namaEdit').val(data.nama),
-          $('#emailEdit').val(data.email),
+          $('#hargaEdit').val(data.harga),
+          $('#deskripsiEdit').val(data.deskripsi),
+          $('#fotoEdit').val(data.foto),
+          $('#jenisEdit').val(data.jenis),
+          $('#stokEdit').val(data.stok),
           $('#editPegawai').modal('show')
       }
     });

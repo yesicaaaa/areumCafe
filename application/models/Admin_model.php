@@ -33,7 +33,6 @@ class Admin_model extends CI_Model{
   {
     $data = [
       'nama'  => htmlspecialchars($this->input->post('nama')),
-      'email' => htmlspecialchars($this->input->post('email')),
       'hak_akses' => htmlspecialchars($this->input->post('hak_akses'))
     ];
 
@@ -50,6 +49,59 @@ class Admin_model extends CI_Model{
             ";
 
     return $this->db->query($sql)->row_array();
+  }
+
+  function getDataMenu()
+  {
+    return $this->db->get('menu')->result_array();
+  }
+
+  function addMenu()
+  {
+    $data = [
+      'nama'  => htmlspecialchars($this->input->post('nama')),
+      'harga' => htmlspecialchars($this->input->post('harga')),
+      'deskripsi' => htmlspecialchars($this->input->post('deskripsi')),
+      'foto'  => $this->_do_uploadMenu(),
+      'jenis' => htmlspecialchars($this->input->post('jenis')),
+      'stok'  => htmlspecialchars($this->input->post('stok')),
+      'date_created'  => date('Y-m-d')
+    ];
+
+    $this->db->insert('menu', $data);
+  }
+
+  private function _do_uploadMenu()
+  {
+    $config = [
+      'upload_path'   => './assets/img/menu/',
+      'allowed_types' => 'jpg|png',
+      'max_size'      => 2048,
+      'overwrite'     => true,
+      'file_name'     => $this->input->post('nama')
+    ];
+    $this->upload->initialize($config);
+
+    if($this->upload->do_upload('foto')){
+      return $this->upload->data('file_name');
+    }else{
+      return 'default.jpg';
+    }
+  }
+
+  private function _menuImg_delete($id)
+  {
+    $menuImg = $this->db->get_where('menu', ['id_menu' => $id])->row_array();
+    if($menuImg['foto'] != 'default.png'){
+      $filename = explode('.', $menuImg['foto'])[0];
+      return array_map('unlink', glob(FCPATH .  "assets/img/menu/$filename.*"));
+    }
+  }
+
+  function menu_delete($id)
+  {
+    $this->_menuImg_delete($id);
+    return $this->db->delete('menu', ['id_menu' => $id]);
   }
 }
 ?>

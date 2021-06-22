@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Roboto&family=Nunito&family=Mate+SC&display=swap');
+
+body {
+  overflow-x: hidden;
+  font-family: 'Nunito', sans-serif;
+}
+
+a {
+	color: white !important;
+  text-decoration: none;
+}
+
+.bg-nav {
+	background-color: #48724b;
+	padding: 0px;
+}
+
+.navbar-brand {
+	font-family: 'Sacramento', cursive;
+	font-size: 40px;
+	padding: 0;
+	color: white !important;
+	position: sticky !important;
+}
+
+.navbar-brand span {
+	color: #b77941 !important;
+	font-family: 'Mate SC', serif;
+	color: #374939;
+}
+
+.navbar-nav {
+	margin-left: 40px;
+}
+
+.username {
+	margin: 20px;
+	color: white;
+}
+
+.nav-link {
+	margin-left: 20px;
+}
+
+.table-orange {
+	background-color: #b77941;
+	color: white;
+}
+
+.table {
+	margin-top: 30px;
+	margin-left: 10px;
+  width: 112%;
+}
+
+.btn-danger {
+	border-radius: 0px !important;
+	margin: 15px 0 -25px 10px;
+}
+
+.alert-danger {
+	margin-left: 10px;
+	border-radius: 0px;
+	width: 112%;
+	padding: 10px;
+}
+
+.cashier-out {
+	color: red !important;
+	font-weight: bold !important;
+}
+
+.form-pemesanan {
+  background-color: #e1e4eb;
+  margin-left: 104px;
+  padding-bottom: 204px;
+}
+
+.form-pemesanan span {
+  color: red;
+}
+
+.form-pemesanan h6 {
+  margin-top: 20px;
+}
+
+.form-pemesanan label {
+  font-size: 14px;
+}
+
+.form-pemesanan input,
+.form-pemesanan button {
+  border-radius: 0px;
+}
+
+.form-pemesanan input {
+  height: 30px;
+}
+
+.sidenav {
+	height: 100%;
+	width: 258px;
+	position: fixed;
+	top: 0px;
+	left: 0;
+	background-color: #48724b;
+}
+
+.daftar-menu h5 {
+  color: white;
+  font-weight: bold;
+  letter-spacing: 8px;
+  margin: 15px 0 10px 17px;
+}
+
+.divider{
+  border-bottom: 1px solid rgba(255, 255, 255, .5);
+}
+
+.nav-stacked h4 {
+  color: white;
+  margin: 5px 5px 5px 5px;
+  font-size: 20px;
+  letter-spacing: 5px;
+}
+
+.nav-stacked li {
+  margin: 12px 0 0 20px;
+}
+
+.nav-stacked span {
+  margin-left: 5px;
+}
+
+.divider-end {
+	border-bottom: 1px solid rgba(255, 255, 255, .5);
+  margin-top: 20px;
+}
+
+.nav-stacked img {
+  width: 12%;
+  margin-top: -10px;
+}
+
+.breadcrumb {
+  background-color: #b77941;
+}
+
+.main {
+  margin-left: 258px;
+}
+
+.bc {
+  margin-left: 15px;
+}
+
+.breadcrumb li {
+  color: white !important;
+}
+
+li.breadcrumb-item::before {
+  color: white !important;
+}

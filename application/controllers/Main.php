@@ -23,6 +23,7 @@ class Main extends CI_Controller {
       if($user){
         if(password_verify($password, $user['password'])){
           $data = [
+            'id_user' => $user['id_user'],
             'email' => $email,
             'nama'  => $user['nama'],
             'hak_akses' => $user['hak_akses']
@@ -80,6 +81,7 @@ class Main extends CI_Controller {
   function signout()
   {
     $this->session->unset_userdata('');
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil keluar akun</div>');
     redirect('main/signIn');
   }
 }

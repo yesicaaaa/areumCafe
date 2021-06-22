@@ -4,7 +4,7 @@
     <h6>
       Tambah Pegawai
       <span>
-        <button class="badge bg-success" id="pegawai-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#tambahPegawaiCollapse" aria-expanded="false" aria-controls="tambahPegawaiCollapse">-</button>
+        <button class="badge bg-success" id="pegawai-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#tambahPegawaiCollapse" aria-expanded="false" aria-controls="tambahPegawaiCollapse">+</button>
       </span>
     </h6>
     <form action="<?= base_url('admin/pegawai') ?>" method="post" class="form-pegawai " id="tambahPegawaiCollapse">
@@ -96,7 +96,7 @@
             </div>
             <div class="form-group">
               <label for="emailEdit">Email<span>*</span></label>
-              <input type="email" class="form-control" id="emailEdit" name="email">
+              <input type="email" class="form-control" id="emailEdit" name="email" disabled>
               <?= form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
             <label for="aksesEdit">Hak Akses<span>*</span></label>

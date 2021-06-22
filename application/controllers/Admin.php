@@ -72,7 +72,6 @@ class Admin extends CI_Controller{
   function editPegawai()
   {
     $this->form_validation->set_rules('nama', 'Nama', 'required');
-    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
     $this->form_validation->set_rules('hak_akses', 'Hak Akses', 'required');
 
     if($this->form_validation->run() == false){
@@ -98,17 +97,39 @@ class Admin extends CI_Controller{
 
   function menuCafe()
   {
-    $data = [
-      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-      'title' => 'Menu Cafe | Areum Cafe',
-      'css'   => 'admin.css',
-      'js'    => 'menuCafe.js'
-    ];
+    $this->form_validation->set_rules('nama', 'Nama Menu', 'required');
+    $this->form_validation->set_rules('harga', 'Harga', 'required');
+    $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
+    $this->form_validation->set_rules('jenis', 'Jenis Menu', 'required');
+    $this->form_validation->set_rules('stok', 'Stok Menu', 'required');
 
-    $this->load->view('templates/header', $data);
-    $this->load->view('templates/side-navbar', $data);
-    $this->load->view('admin/menu-cafe', $data);
-    $this->load->view('templates/footer', $data);
+    if($this->form_validation->run() == false){
+      $data = [
+        'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+        'menu'  => $this->am->getDataMenu(),
+        'title' => 'Menu Cafe | Areum Cafe',
+        'css'   => 'admin.css',
+        'js'    => 'menuCafe.js'
+      ];
+  
+      $this->load->view('templates/header', $data);
+      $this->load->view('templates/side-navbar', $data);
+      $this->load->view('admin/menu-cafe', $data);
+      $this->load->view('templates/footer', $data);
+    } else {
+      $this->am->addMenu();
+      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Menu baru berhasil ditambahkan.</div>');
+      redirect('admin/menuCafe');
+    }   
+  }
+
+  function menu_delete()
+  {
+    foreach($_POST['id'] as $id){
+      $this->am->menu_delete($id);
+    }
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Menu berhasil dihapus.</div>');
+    redirect('admin/menuCafe');
   }
 }
 ?>

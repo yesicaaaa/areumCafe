@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Roboto&family=Mate+SC&display=swap');
+
+a {
+  color: white !important;
+}
+
+.bg-nav {
+  background-color: #48724b;
+  padding: 0px;
+}
+
+.navbar-brand {
+	font-family: 'Sacramento', cursive;
+	font-size: 40px;
+	padding: 0;
+	color: white !important;
+	position: sticky !important;
+}
+
+.navbar-brand span {
+  color: #b77941 !important;
+	font-family: 'Mate SC', serif;
+	color: #374939;
+}
+
+.navbar-nav {
+  margin-left: 40px;
+}
+
+.username {
+  margin: 20px;
+  color: white;
+}
+
+.nav-link {
+  margin-left: 20px;
+}
+
+.table-orange {
+  background-color: #b77941;
+  color: white;
+}
+
+.table {
+  margin-top: 30px;
+  margin-left: 10px;
+}
+
+.btn-danger {
+  border-radius: 0px !important;
+  margin: 15px 0 -25px 10px;
+}
+
+.alert-danger {
+  margin-left: 10px;
+  border-radius: 0px;
+  width: 100%;
+  padding: 10px;
+}
+
+.cashier-out {
+  color: red !important;
+  font-weight: bold !important;
+}
