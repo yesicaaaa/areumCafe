@@ -106,6 +106,10 @@ a {
 	background-color: #48724b;
 }
 
+.sidenav a:hover {
+	color: rgba(255, 255, 255, .5) !important;
+}
+
 .daftar-menu h5 {
   color: white;
   font-weight: bold;
@@ -160,4 +164,144 @@ a {
 
 li.breadcrumb-item::before {
   color: white !important;
+}
+
+.row-menu {
+	border: 1px solid rgba(72, 114, 76, .7);
+	width: 100%;
+	margin-left: 0px;
+	padding: 6px 0;
+	margin-top: 5px;
+}
+
+.row-menu img {
+	width: 60%;
+	margin-left: 20px;
+}
+
+.row-menu p {
+	color: #514f50;
+	text-align: justify;
+	font-size: 12px;
+}
+
+.row-menu h5 {
+	color: #b77842;
+	font-size: 17px;
+	font-weight: bold;
+	margin-bottom: -1px;
+}
+
+.row-menu h6 {
+	margin: 23px 0 0 60px;
+}
+
+.h7 {
+	font-size: 16px !important;
+	margin: -3px 0 0 120px;
+	font-weight: bold;
+}
+
+.row-menu a {
+	margin: 27px 0 0 150px;
+}
+
+.row-menu a:hover {
+	color: rgba(255, 255, 255, .5) !important;
+}
+
+.row-menu span {
+	margin-left: 110px;
+	font-weight: bold;
+}
+
+.footer-pesanan{
+	background-color: #b77842;
+}
+
+.footer-pesanan {
+	width: 2%;
+	padding: 20px 48px 20px 25px;
+	bottom: 0;
+	position: fixed;
+	margin: 0 0 20px 74%;
+}
+
+.footer-pesanan a:hover {
+	color: rgba(255, 255, 255, .5) !important;
+}
+
+.divider-delete {
+	border: 1px solid red;
+	margin-top: 43%;
+}
+
+.delete-pelanggan a{
+	color: red !important;
+	letter-spacing: 10px;
+	font-weight: bold;
+	margin-left: 30px;
+}
+
+.delete-pelanggan a:hover {
+	color: rgba(205, 0, 3, .5) !important;
+}
+
+.alert-cus .alert-success{
+	color: white !important;
+	background-color: rgba(0, 0, 0, 0.5) !important;
+	border-radius: 5px !important;
+	width: 17% !important;
+	font-size: 13px !important;
+	margin: 200px 0 0 31% !important;
+	position: absolute !important;
+	text-align: center !important;
+}
+
+.data-pesanan {
+	background-color: #dfdfdf;
+	padding: 20px 0 15px 30px;
+	margin-top: -16px;
+}
+
+.col-md-3 h6{
+	font-weight: bold !important;
+}
+
+.menu {
+	margin: 30px 0 0 50px;
+}
+
+.titik {
+	margin-top: 30px;
+}
+
+.harga-cart {
+	margin-top: 30px;
+	font-weight: bold;
+}
+
+.divider-jumlah {
+	border-bottom: 2px solid #535353;
+	width: 82%;
+	margin-left: 50px;
+}
+
+.total-item {
+	margin: 5px 0 0 50px;
+}
+
+.subtotal{
+	margin: 5px 0 0 285px;
+}
+
+.subtotal p {
+	margin-bottom: 0px;
+}
+
+.btn-pesanan {
+	margin-left: 707px;
+	width: 238px;
+	border-radius: 0px;
+	margin-top: 20px;
 }

@@ -23,6 +23,148 @@ class DaftarMenu extends CI_Controller {
     $this->load->view('waiter/daftar_menu', $data);
     $this->load->view('templates/footer', $data);
   }
-}
 
-?>
+  function menu_tea()
+  {
+    $data = [
+      'title' => 'Teh | Areum Cafe',
+      'jenis' => 'Teh',
+      'menu'  => $this->dm->menu_tea(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function menu_juice()
+  {
+    $data = [
+      'title' => 'Jus | Areum Cafe',
+      'jenis' => 'Jus',
+      'menu'  => $this->dm->menu_juice(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function menu_milk()
+  {
+    $data = [
+      'title' => 'Susu | Areum Cafe',
+      'jenis' => 'Susu',
+      'menu'  => $this->dm->menu_milk(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function menu_soda()
+  {
+    $data = [
+      'title' => 'Soda | Areum Cafe',
+      'jenis' => 'Soda',
+      'menu'  => $this->dm->menu_soda(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function menu_rice()
+  {
+    $data = [
+      'title' => 'Nasi | Areum Cafe',
+      'jenis' => 'Nasi',
+      'menu'  => $this->dm->menu_rice(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function menu_noodle()
+  {
+    $data = [
+      'title' => 'Mie | Areum Cafe',
+      'jenis' => 'Mie',
+      'menu'  => $this->dm->menu_noodle(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function menu_pastry()
+  {
+    $data = [
+      'title' => 'Kue Kering | Areum Cafe',
+      'jenis' => 'Kue Kering',
+      'menu'  => $this->dm->menu_pastry(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function menu_cake()
+  {
+    $data = [
+      'title' => 'Bolu | Areum Cafe',
+      'jenis' => 'Bolu',
+      'menu'  => $this->dm->menu_cake(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function menu_dessert()
+  {
+    $data = [
+      'title' => 'Dessert | Areum Cafe',
+      'jenis' => 'Dessert',
+      'menu'  => $this->dm->menu_dessert(),
+      'css'   => 'waiter.css',
+      'js'    => ''
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar-menu');
+    $this->load->view('waiter/daftar_menu', $data);
+    $this->load->view('templates/footer', $data);
+  }
+}

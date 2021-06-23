@@ -45,22 +45,54 @@ class Waiter extends CI_Controller{
       $this->load->view('templates/footer', $data);
     } else {
       $this->wm->addPelanggan();
-      redirect('waiter/add_pesanan');
+      redirect('DaftarMenu/menu_coffee');
     }
   }
 
-  function add_pesanan()
+  function add_to_cart($id)
+  {
+    $this->wm->add_to_cart($id);
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Ditambahkan ke pesanan</div>');
+    redirect('waiter/cart');
+  }
+
+  function delete_pelanggan($id)
+  {
+    $this->wm->delete_pelanggan($id);
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pesanan berhasil dibatalkan</div>');
+    redirect('waiter/pesanan');
+  }
+
+  function cart()
   {
     $data = [
-      'title' => 'Daftar Menu | Areum Cafe',
+      'waiter'  => $this->db->get_where('user', ['id_user' => $this->session->userdata('id_waiter')])->row_array(),
+      'cart'  => $this->cart->contents(),
+      'title' => 'Keranjang | Areum Cafe',
       'css'   => 'waiter.css',
       'js'    => 'waiter.js'
     ];
 
     $this->load->view('templates/header', $data);
-    $this->load->view('templates/sidebar-menu');
-    $this->load->view('waiter/daftar_menu');
+    $this->load->view('templates/sidebar-menu', $data);
+    $this->load->view('waiter/cart', $data);
     $this->load->view('templates/footer', $data);
   }
+
+  function add_pesanan()
+  {
+    $this->wm->add_pesanan();
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pesanan berhasil dibuat</div>');
+    redirect('waiter/pesanan');
+  }
+
+  function delete_pesanan()
+  {
+    foreach($_POST['id'] as $id){
+      $this->wm->delete_pesanan($id);
+    }
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pesanan berhasil dihapus</div>');
+    redirect('waiter/pesanan');
+  }
 }
-?>
+?>  

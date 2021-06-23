@@ -13,7 +13,7 @@
           <a class="nav-link" href="<?= base_url() ?>waiter/pesanan">Pesanan</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?= base_url() ?>main/signOut">Keluar</a>
+          <a class="nav-link" href="<?= base_url() ?>main/signOut" onclick="return confirm('Yakin ingin keluar?')">Keluar</a>
         </li>
       </ul>
     </div>

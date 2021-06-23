@@ -1,9 +1,11 @@
 <div class="row">
   <div class="col-md-7">
-    <button class="btn btn-danger"><i class="fa fa-fw fa-minus-circle"></i> Hapus Pesanan</button>
+    <form action="<?= base_url() ?>waiter/delete_pesanan" method="POST">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus pesanan?')"><i class="fa fa-fw fa-minus-circle"></i> Hapus Pesanan</button>
     <table class="table">
       <thead class="table-orange">
         <tr>
+          <th scope="col"></th>
           <th scope="col">#</th>
           <th scope="col">Tanggal</th>
           <th scope="col">Nama Pelanggan</th>
@@ -15,11 +17,11 @@
         </tr>
       </thead>
       <tbody>
-        <?php $i = 0; ?>
-        <?php foreach ($pesanan as $p) : ?>
+          <?php $i = 1; ?>
+          <?php foreach ($pesanan as $p) : ?>
           <tr>
             <th>
-              <input type="checkbox" name="id[]" value="<?= $p['id_pesanan'] ?>">
+              <input type="checkbox" name="id[]" value="<?= $p['id_pelanggan'] ?>">
             </th>
             <th scope="row"><?= $i++ ?></th>
             <td><?= $p['tanggal'] ?></td>
@@ -35,6 +37,7 @@
         <?php endforeach; ?>
       </tbody>
     </table>
+  </form>
     <?php if ($pesanan == null) : ?>
       <div class="alert alert-danger" role="alert">
         Tidak ada data!
@@ -42,9 +45,10 @@
     <?php endif; ?>
   </div>
   <div class="col-md-4 form-pemesanan">
+    <?= $this->session->flashdata('message'); ?>
     <h6>Tulis Pesanan</h6>
     <form action="<?= base_url() ?>waiter/pesanan" method="POST">
-    <input type="hidden" name="id_pelanggan">
+      <input type="hidden" name="id_pelanggan">
       <div class="mb-3">
         <label for="nama_pelanggan" class="form-label">Nama Pelanggan<span>*</span></label>
         <input type="text" class="form-control" id="nama_pelanggan" name="nama_pelanggan" value="<?= set_value('nama_pelanggan') ?>" required autocomplete="off">
@@ -65,7 +69,7 @@
         <input type="date" class="form-control" id="tanggal" name="tanggal" value="<?= set_value('tanggal') ?>" required autocomplete="off">
         <?= form_error('tanggal', '<div class="invalid-feedback">', '</div>'); ?>
       </div>
-      <input type="hidden" name="id_waiter" value="<?= $this->session->userdata('id_user'); ?>" >
+      <input type="hidden" name="id_waiter" value="<?= $this->session->userdata('id_user'); ?>">
       <button type="submit" class="btn btn-success" onclick="return confirm('Yakin ingin melanjutkan pemesanan?')">Selanjutnya</button>
     </form>
   </div>

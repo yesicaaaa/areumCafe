@@ -42,10 +42,19 @@
           </div>
           <div class="mb-3 row">
             <label for="jenis" class="col-sm-2 col-form-label">Jenis Menu<span>*</span></label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" name="jenis" id="jenis" autocomplete="off" value="<?= set_value('jenis') ?>">
-              <?= form_error('jenis', '<div class="invalid-feedback">', '</div>'); ?>
-            </div>
+            <select class="form-select form-jenis" id="jenis" name="jenis">
+              <option value="">Pilih Jenis Menu</option>
+              <option value="kopi">kopi</option>
+              <option value="teh">teh</option>
+              <option value="jus">jus</option>
+              <option value="susu">susu</option>
+              <option value="soda">soda</option>
+              <option value="nasi">nasi</option>
+              <option value="mie">mie</option>
+              <option value="pastry">pastry</option>
+              <option value="cake">cake</option>
+              <option value="dessert">dessert</option>
+            </select>
           </div>
           <div class="mb-3 row">
             <label for="stok" class="col-sm-2 col-form-label">Stok<span>*</span></label>
@@ -86,7 +95,7 @@
             <td><?= $m['harga'] ?></td>
             <td><?= $m['deskripsi'] ?></td>
             <td>
-            <img src="<?= base_url('assets/img/menu/') . $m['foto'] ?>" alt="menu" width="90%">
+              <img src="<?= base_url('assets/img/menu/') . $m['foto'] ?>" alt="menu" width="90%">
             </td>
             <td><?= $m['jenis'] ?></td>
             <td><?= $m['stok'] ?></td>
@@ -176,7 +185,7 @@
           $('#fotoEdit').val(data.foto),
           $('#jenisEdit').val(data.jenis),
           $('#stokEdit').val(data.stok),
-          $('#editPegawai').modal('show')
+          $('#editMenu').modal('show')
       }
     });
   }

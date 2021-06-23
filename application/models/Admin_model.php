@@ -104,4 +104,3 @@ class Admin_model extends CI_Model{
     return $this->db->delete('menu', ['id_menu' => $id]);
   }
 }
-?>
