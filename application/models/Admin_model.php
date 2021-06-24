@@ -1,7 +1,8 @@
-<?php 
+<?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Admin_model extends CI_Model{
+class Admin_model extends CI_Model
+{
   function getDataPegawai()
   {
     $sql = "SELECT * FROM `user` as `u`
@@ -82,9 +83,9 @@ class Admin_model extends CI_Model{
     ];
     $this->upload->initialize($config);
 
-    if($this->upload->do_upload('foto')){
+    if ($this->upload->do_upload('foto')) {
       return $this->upload->data('file_name');
-    }else{
+    } else {
       return 'default.jpg';
     }
   }
@@ -92,7 +93,7 @@ class Admin_model extends CI_Model{
   private function _menuImg_delete($id)
   {
     $menuImg = $this->db->get_where('menu', ['id_menu' => $id])->row_array();
-    if($menuImg['foto'] != 'default.png'){
+    if ($menuImg['foto'] != 'default.png') {
       $filename = explode('.', $menuImg['foto'])[0];
       return array_map('unlink', glob(FCPATH .  "assets/img/menu/$filename.*"));
     }
@@ -102,5 +103,20 @@ class Admin_model extends CI_Model{
   {
     $this->_menuImg_delete($id);
     return $this->db->delete('menu', ['id_menu' => $id]);
+  }
+
+  function editMenu()
+  {
+    $data = [
+      'nama'  => htmlspecialchars($this->input->post('nama')),
+      'harga' => htmlspecialchars($this->input->post('harga')),
+      'deskripsi' => htmlspecialchars($this->input->post('deskripsi')),
+      // 'foto'  => $this->_do_uploadMenu(),
+      'jenis' => htmlspecialchars($this->input->post('jenis')),
+      'stok'  => htmlspecialchars($this->input->post('stok')),
+      'date_created'  => date('Y-m-d')
+    ];
+
+    $this->db->insert('menu', $data);
   }
 }

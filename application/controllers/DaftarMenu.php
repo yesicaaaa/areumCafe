@@ -11,6 +11,7 @@ class DaftarMenu extends CI_Controller {
   function menu_coffee()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Kopi | Areum Cafe',
       'jenis' => 'Kopi',
       'menu'  => $this->dm->menu_coffee(),
@@ -27,6 +28,7 @@ class DaftarMenu extends CI_Controller {
   function menu_tea()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Teh | Areum Cafe',
       'jenis' => 'Teh',
       'menu'  => $this->dm->menu_tea(),
@@ -43,6 +45,7 @@ class DaftarMenu extends CI_Controller {
   function menu_juice()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Jus | Areum Cafe',
       'jenis' => 'Jus',
       'menu'  => $this->dm->menu_juice(),
@@ -59,6 +62,7 @@ class DaftarMenu extends CI_Controller {
   function menu_milk()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Susu | Areum Cafe',
       'jenis' => 'Susu',
       'menu'  => $this->dm->menu_milk(),
@@ -75,6 +79,7 @@ class DaftarMenu extends CI_Controller {
   function menu_soda()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Soda | Areum Cafe',
       'jenis' => 'Soda',
       'menu'  => $this->dm->menu_soda(),
@@ -91,6 +96,7 @@ class DaftarMenu extends CI_Controller {
   function menu_rice()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Nasi | Areum Cafe',
       'jenis' => 'Nasi',
       'menu'  => $this->dm->menu_rice(),
@@ -107,6 +113,7 @@ class DaftarMenu extends CI_Controller {
   function menu_noodle()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Mie | Areum Cafe',
       'jenis' => 'Mie',
       'menu'  => $this->dm->menu_noodle(),
@@ -123,6 +130,7 @@ class DaftarMenu extends CI_Controller {
   function menu_pastry()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Kue Kering | Areum Cafe',
       'jenis' => 'Kue Kering',
       'menu'  => $this->dm->menu_pastry(),
@@ -139,6 +147,7 @@ class DaftarMenu extends CI_Controller {
   function menu_cake()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Bolu | Areum Cafe',
       'jenis' => 'Bolu',
       'menu'  => $this->dm->menu_cake(),
@@ -155,6 +164,7 @@ class DaftarMenu extends CI_Controller {
   function menu_dessert()
   {
     $data = [
+      'cart'  => $this->cart->contents(),
       'title' => 'Dessert | Areum Cafe',
       'jenis' => 'Dessert',
       'menu'  => $this->dm->menu_dessert(),

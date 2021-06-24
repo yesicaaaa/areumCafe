@@ -1,32 +1,38 @@
-<?php 
-defined('BASEPATH') or exit ('No direct script access allowed');
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Waiter_model extends CI_Model {
-  function getPesanan()
+class Waiter_model extends CI_Model
+{
+  function getPesanan($id_waiter)
   {
     $sql = "SELECT * FROM `pelanggan` AS `pl`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `pl`.`id_pelanggan`
             JOIN `user` AS `u` ON `u`.`id_user` = `pl`.`id_waiter`
+            WHERE `pl`.`id_waiter` = $id_waiter
+            AND `ps`.`status` = 'Dipesan'
             GROUP BY `pl`.`nama_pelanggan`
           ";
 
     return $this->db->query($sql)->result_array();
   }
 
-  private function _cekIdPelanggan()
+  function getHistoryPesanan($id_waiter)
   {
-    $sql = "SELECT MAX(`id_pelanggan`) AS `id_pelanggan` FROM `pelanggan`";
-    $id = $this->db->query($sql)->row_array();
-    return $id['id_pelanggan'];
+    $sql = "SELECT * FROM `pelanggan` AS `pl`
+            JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `pl`.`id_pelanggan`
+            JOIN `user` AS `u` ON `u`.`id_user` = `pl`.`id_waiter`
+            WHERE `pl`.`id_waiter` = $id_waiter
+            AND `ps`.`status` != 'Dipesan'
+            GROUP BY `pl`.`nama_pelanggan`
+          ";
+
+    return $this->db->query($sql)->result_array();
   }
 
   function addPelanggan()
   {
-    $db = $this->_cekIdPelanggan();
-    $nourut = substr($db, 4, 3);
-    $nowId = $nourut + 1;
     $data = [
-      'id_pelanggan'    => date('Y').$nowId,
+      'id_pelanggan'    => time(),
       'nama_pelanggan'  => htmlspecialchars($this->input->post('nama_pelanggan')),
       'phone'           => htmlspecialchars($this->input->post('phone')),
       'tanggal'         => htmlspecialchars($this->input->post('tanggal')),
@@ -47,8 +53,13 @@ class Waiter_model extends CI_Model {
       'price'   => $menu['harga'],
       'name'    => $menu['nama']
     ];
-
     $this->cart->insert($data);
+
+    $stok = [
+      'stok'  => $menu['stok'] - 1
+    ];
+    $this->db->where('id_menu', $id);
+    $this->db->update('menu', $stok);
   }
 
   function delete_pelanggan($id)
@@ -69,7 +80,7 @@ class Waiter_model extends CI_Model {
   function add_pesanan()
   {
     $pesan = array();
-    foreach($_POST['id_pelanggan'] as $key => $val){
+    foreach ($_POST['id_pelanggan'] as $key => $val) {
       $pesan[] = array(
         'id_pelanggan'  => $_POST['id_pelanggan'][$key],
         'id_menu'       => $_POST['id_menu'][$key],
@@ -81,6 +92,16 @@ class Waiter_model extends CI_Model {
     }
     $this->db->insert_batch('pesanan', $pesan);
 
+    $cart = [
+      'id_pelanggan'  => $this->session->userdata('id_pelanggan'),
+      'total_items' => $this->cart->total_items(),
+      'total'    => $this->cart->total(),
+      'tax'         => $this->cart->total() * 0.1,
+      'subtotal'    => $this->cart->total() + ($this->cart->total() * 0.1)
+    ];
+
+    $this->db->insert('total_pesanan', $cart);
+
     $this->cart->destroy();
   }
 
@@ -88,6 +109,46 @@ class Waiter_model extends CI_Model {
   {
     return $this->db->delete('pelanggan', ['id_pelanggan' => $id]);
   }
-}
 
-?>
+  function getPesananPelanggan($id_pelanggan)
+  {
+    $sql = "SELECT * FROM `pesanan` 
+            JOIN `menu` ON `menu`.`id_menu` = `pesanan`.`id_menu`
+            WHERE `pesanan`.`id_pelanggan` = $id_pelanggan 
+            AND `pesanan`.`status` = 'Dipesan'
+          ";
+
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getHistoryPesananPelanggan($id_pelanggan)
+  {
+    $sql = "SELECT * FROM `pesanan` 
+            JOIN `menu` ON `menu`.`id_menu` = `pesanan`.`id_menu`
+            WHERE `pesanan`.`id_pelanggan` = $id_pelanggan 
+            AND `pesanan`.`status` != 'Dipesan'
+          ";
+
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getDataPelanggan($id_pelanggan, $id_waiter)
+  {
+    return $this->db->get_where('pelanggan', ['id_pelanggan' => $id_pelanggan, 'id_waiter' => $id_waiter])->row_array();
+  }
+
+  function getTotalPesanan($id_pelanggan)
+  {
+    return $this->db->get_where('total_pesanan', ['id_pelanggan' => $id_pelanggan])->row_array();
+  }
+
+  function antarkan_pesanan($id_pelanggan)
+  {
+    $data = [
+      'status' => 'Belum Dibayar'
+    ];
+
+    $this->db->where('id_pelanggan', $id_pelanggan);
+    $this->db->update('pesanan', $data);
+  }
+}

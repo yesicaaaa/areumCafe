@@ -5,6 +5,11 @@
       <li class="breadcrumb-item active" aria-current="page"><?= $jenis ?></li>
     </ol>
   </nav>
+  <?php if($menu == null) : ?>
+  <div class="alert alert-danger">
+    Menu tidak tersedia!
+  </div>
+  <?php endif; ?>
   <?php foreach ($menu as $m) : ?>
     <div class="row row-menu">
       <div class="col-md-2">
@@ -23,10 +28,14 @@
           <p class="h7"><?= $m['stok'] ?></p>
         <?php else : ?>
           <p class="h7">Habis</p>
-          <?php endif; ?>
+        <?php endif; ?>
       </div>
       <div class="col-md-2">
-        <a href="<?= base_url('waiter/add_to_cart/') . $m['id_menu'] ?>" class="badge bg-success" onclick="return confirm('Yakin ingin memesan?')">Tambahkan</a>
+        <?php if ($m['stok'] > 0) : ?>
+          <a href="<?= base_url('waiter/add_to_cart/') . $m['id_menu'] ?>" class="badge bg-success" onclick="return confirm('Yakin ingin memesan?')">Tambahkan</a>
+        <?php else : ?>
+          <a class="badge bg-secondary" disabled>Tambahkan</a>
+        <?php endif; ?>
       </div>
     </div>
   <?php endforeach; ?>

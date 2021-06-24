@@ -43,7 +43,13 @@
     </ul>
     <div class="divider-delete"></div>
     <ul class="nav nav-pills nav-stacked delete-pelanggan">
-      <li><a href="<?= base_url('waiter/delete_pelanggan/') . $this->session->userdata('id_pelanggan'); ?>" onclick="return confirm('Yakin ingin membatalkan pesanan?')">BATALKAN</a></li>
+      <form action="<?= base_url('waiter/delete_pelanggan/') . $this->session->userdata('id_pelanggan');?>" method="POST">
+        <?php foreach ($cart as $c) : ?>
+          <input type="hidden" name="id[]" value="<?= $c['id'] ?>">
+          <input type="hidden" name="stok[]" value="<?= $c['qty'] ?>">
+        <?php endforeach; ?>
+        <li><button type="submit" onclick="return confirm('Yakin ingin membatalkan pesanan?')">BATALKAN</button></li>
+      </form>
     </ul>
   </div>
 </div>

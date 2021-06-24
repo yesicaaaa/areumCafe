@@ -3,7 +3,7 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item bc"><a href="javascript:void(0)">Pesanan</a></li>
     </ol>
-</nav>
+  </nav>
   <div class="alert-cus">
     <?= $this->session->flashdata('message'); ?>
   </div>

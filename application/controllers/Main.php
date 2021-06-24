@@ -34,7 +34,7 @@ class Main extends CI_Controller {
           }elseif($user['hak_akses'] == 2){
             redirect('cashier');
           }else{
-            redirect('waiter');
+            redirect('waiter/pesanan');
           }
         }else{
           $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password salah!</div>');

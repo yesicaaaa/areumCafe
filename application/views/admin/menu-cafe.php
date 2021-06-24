@@ -182,7 +182,7 @@
           $('#namaEdit').val(data.nama),
           $('#hargaEdit').val(data.harga),
           $('#deskripsiEdit').val(data.deskripsi),
-          $('#fotoEdit').val(data.foto),
+          // $('#fotoEdit').val(data.foto),
           $('#jenisEdit').val(data.jenis),
           $('#stokEdit').val(data.stok),
           $('#editMenu').modal('show')

@@ -6,17 +6,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Beranda</a>
-        </li>
+        </li> -->
         <li class="nav-item">
-          <a class="nav-link" href="<?= base_url() ?>waiter/pesanan">Pesanan</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url() ?>main/signOut" onclick="return confirm('Yakin ingin keluar?')">Keluar</a>
+          <a class="nav-link" href="<?= base_url('waiter/history_pesanan_all/')  ?>">History Pesanan</a>
         </li>
       </ul>
     </div>
+    <a href="<?= base_url() ?>main/signOut" class="badge bg-danger" onclick="return confirm('Yakin ingin meninggalkan halaman?')">Keluar</a>
     <p class="username"><?= $user['nama']; ?></p>
   </div>
 </nav>
