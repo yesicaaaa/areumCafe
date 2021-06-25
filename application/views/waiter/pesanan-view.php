@@ -47,21 +47,27 @@
   </div>
   <div class="col-md-4 view-pesanan">
     <?= $this->session->flashdata('message'); ?>
-    <div class="mb-3">
-      <label for="nama_pelanggan" class="form-label nama-pelanggan">Nama Pelanggan</label>
-      <input type="text" class="form-control" value="<?= $pelanggan['nama_pelanggan'] ?>" readonly>
-    </div>
-    <div class="mb-3">
-      <label for="phone" class="form-label">No. Telepon</label>
-      <input type="text" class="form-control" value="<?= $pelanggan['phone'] ?>" readonly>
-    </div>
-    <div class="mb-3">
-      <label for="no_meja" class="form-label">No. Meja</label>
-      <input type="text" class="form-control" value="<?= $pelanggan['no_meja'] ?>" readonly>
-    </div>
-    <div class="mb-3">
-      <label for="tanggal" class="form-label">Tanggal Pemesanan</label>
-      <input type="date" class="form-control" value="<?= $pelanggan['tanggal'] ?>" readonly>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="nama_pelanggan" class="form-label nama-pelanggan">Nama Pelanggan</label>
+          <input type="text" class="form-control" value="<?= $pelanggan['nama_pelanggan'] ?>" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">No. Telepon</label>
+          <input type="text" class="form-control" value="<?= $pelanggan['phone'] ?>" readonly>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="no_meja" class="form-label no_meja">No. Meja</label>
+          <input type="text" class="form-control" value="<?= $pelanggan['no_meja'] ?>" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="tanggal" class="form-label">Tanggal Pemesanan</label>
+          <input type="date" class="form-control" value="<?= $pelanggan['tanggal'] ?>" readonly>
+        </div>
+      </div>
     </div>
     <h6>Daftar Pesanan</h6>
     <?php foreach ($pesanan as $p) : ?>
@@ -70,7 +76,7 @@
           <p><b><?= $p['qty'] ?></b>x <?= $p['nama'] ?></p>
         </div>
         <div class="col-md-3">
-          <b><?= $p['subtotal'] ?></b>
+          <b><?= number_format($p['subtotal'], 0, ',', '.') ?></b>
         </div>
       </div>
     <?php endforeach; ?>

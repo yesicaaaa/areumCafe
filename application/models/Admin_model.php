@@ -86,7 +86,7 @@ class Admin_model extends CI_Model
     if ($this->upload->do_upload('foto')) {
       return $this->upload->data('file_name');
     } else {
-      return 'default.jpg';
+      return 'default.png';
     }
   }
 
@@ -107,16 +107,36 @@ class Admin_model extends CI_Model
 
   function editMenu()
   {
+    $id_menu = $this->input->post('id_menu');
     $data = [
       'nama'  => htmlspecialchars($this->input->post('nama')),
       'harga' => htmlspecialchars($this->input->post('harga')),
       'deskripsi' => htmlspecialchars($this->input->post('deskripsi')),
-      // 'foto'  => $this->_do_uploadMenu(),
+      'foto'  => $this->_do_uploadEditMenu($this->input->post('foto'), $id_menu),
       'jenis' => htmlspecialchars($this->input->post('jenis')),
       'stok'  => htmlspecialchars($this->input->post('stok')),
       'date_created'  => date('Y-m-d')
     ];
+    $this->db->where('id_menu', $id_menu);
+    $this->db->update('menu', $data);
+  }
 
-    $this->db->insert('menu', $data);
+  private function _do_uploadEditMenu($foto, $id_menu)
+  {
+    $menu = $this->db->get_where('menu', ['id_menu' => $id_menu])->row_array();
+    $config = [
+      'upload_path'   => './assets/img/menu/',
+      'allowed_types' => 'jpg|png',
+      'max_size'      => 2048,
+      'overwrite'     => true,
+      'file_name'     => $this->input->post('nama')
+    ];
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload('foto')) {
+      return $this->upload->data('file_name');
+    } else {
+      return $menu['foto'];
+    }
   }
 }

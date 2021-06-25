@@ -29,14 +29,17 @@
     <?php foreach ($cart as $c) : ?>
       <div class="row daftar-pesanan">
         <div class="col-md-3">
-          <p class="menu"><?= $c['qty'] ?>x <?= $c['name'] ?></p>
+          <p class="menu">
+            <a href="<?= base_url('waiter/delete_cart/') . $c['rowid'] . '/' . $c['id'] . '/' . $c['qty'] ?>" class="badge bg-danger" onclick="return confirm('Yakin ingin menghapus pesanan?')">Hapus</a>
+            <?= $c['qty'] ?>x <?= $c['name'] ?>
+          </p>
         </div>
         <div class="col-md-6 titik">
           <?php for ($i = 0; $i <= 69; $i++) : ?>
             .
           <?php endfor; ?>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
           <p class="harga-cart"><?= number_format($c['price'], 0, ',', '.') ?></p>
         </div>
       </div>

@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Roboto&family=Mate+SC&display=swap');
 
+body {
+  overflow-x: hidden;
+}
+
 a {
   color: white !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: rgba(255, 255, 255, .5) !important;
 }
 
 .bg-nav {
@@ -44,6 +53,7 @@ a {
 .table {
   margin-top: 30px;
   margin-left: 10px;
+  width: 112%;
 }
 
 .btn-danger {
@@ -58,7 +68,71 @@ a {
   padding: 10px;
 }
 
-.cashier-out {
-  color: red !important;
-  font-weight: bold !important;
+.table-brown {
+  background-color: #b77941;
+  color: white;
+}
+
+.proses-transaksi {
+	background-color: #e1e4eb;
+	margin-left: 104px;
+	padding-bottom: 200px;
+}
+
+.proses-transaksi h6 {
+	margin-bottom: 30px;
+}
+
+.proses-transaksi label {
+	font-size: 14px;
+}
+
+.proses-transaksi input,
+.proses-transaksi button {
+	border-radius: 0px;
+}
+
+.proses-transaksi input {
+	height: 30px;
+	margin-top: -7px !important;
+}
+
+.proses-transaksi .mb-3 {
+	margin-top: -15px !important;
+}
+
+.nama-pelanggan {
+	margin-top: 17px;
+}
+
+.divider-data-pesanan {
+	border-bottom: 1px solid #374939;
+}
+
+.daftar-pesanan {
+	margin-top: -20px;
+}
+
+.total-pesanan p {
+	margin-bottom: 0px;
+}
+
+.total-pesanan .col-md-9 {
+	padding-left: 100px;
+}
+
+.total-pesanan .com-md-3 {
+	margin-left: 64px;
+}
+
+.no-meja {
+  margin-top: 18px;
+}
+
+.kasir {
+  margin-top: -20px;
+}
+
+.tgl-bayar{
+  margin-top: -15px;
 }

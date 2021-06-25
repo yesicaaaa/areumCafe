@@ -32,7 +32,7 @@ class Main extends CI_Controller {
           if($user['hak_akses'] == 1){
             redirect('admin');
           }elseif($user['hak_akses'] == 2){
-            redirect('cashier');
+            redirect('cashier/transaksi');
           }else{
             redirect('waiter/pesanan');
           }

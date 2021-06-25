@@ -169,4 +169,23 @@ class Waiter extends CI_Controller
     $this->load->view('waiter/history-pesanan-all', $data);
     $this->load->view('templates/footer', $data);
   }
+
+  function delete_cart($rowid, $id, $qty)
+  {
+    $menu = $this->db->get_where('menu', ['id_menu' => $id])->row_array();
+    $stok = [
+      'stok'  => $menu['stok'] + $qty
+    ];
+    $this->db->where('id_menu', $id);
+    $this->db->update('menu', $stok);
+
+    $data = [
+      'rowid' => $rowid,
+      'qty'   => 0
+    ];
+    $this->cart->update($data);
+
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pesanan dihapus!</div>');
+    redirect('waiter/cart');
+  }
 }

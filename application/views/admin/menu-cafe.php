@@ -142,7 +142,7 @@
             </div>
             <div class="form-group">
               <label for="fotoEdit">Foto<span>*</span></label>
-              <input type="file" class="form-control" id="fotoEdit" name="foto">
+              <input type="file" class="form-control" id="fotoEdit" name="foto" value="rr">
               <?= form_error('foto', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
             <div class="form-group">
@@ -182,7 +182,6 @@
           $('#namaEdit').val(data.nama),
           $('#hargaEdit').val(data.harga),
           $('#deskripsiEdit').val(data.deskripsi),
-          // $('#fotoEdit').val(data.foto),
           $('#jenisEdit').val(data.jenis),
           $('#stokEdit').val(data.stok),
           $('#editMenu').modal('show')

@@ -6,20 +6,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Beranda</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url() ?>cashier/pesanan">Pesanan</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url() ?>cashier/transaksi">Transaksi</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Transaksi</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url() ?>main/signOut">Keluar</a>
+          <a class="nav-link" href="<?= base_url() ?>cashier/history_transaksi">History Transaksi</a>
         </li>
       </ul>
     </div>
+    <a href="<?= base_url() ?>main/signOut" class="badge bg-danger" onclick="return confirm('Yakin ingin meninggalkan halaman?')">Keluar</a>
     <p class="username"><?= $user['nama']; ?></p>
   </div>
 </nav>
