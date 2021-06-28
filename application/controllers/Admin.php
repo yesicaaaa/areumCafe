@@ -7,17 +7,29 @@ class Admin extends CI_Controller
   {
     parent::__construct();
     $this->load->model('Admin_model', 'am');
+    is_logged_in_admin();
   }
 
-  function index()
+  function index($year = null, $month = null)
   {
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-      'pegawai' => $this->db->get('user')->result_array(),
+      'pegawaiGrafik' => $this->am->getPegawaiGrafik(),
+      'menuGrafik'  => $this->am->getMenuGrafik(),
+      'menuTerjualGrafik' => $this->am->getMenuTerjualGrafik(),
+      'stokMenuGrafik'  => $this->am->getStokMenuGrafik(),
       'title' => 'Dashboard | Areum Cafe',
       'css'   => 'admin.css',
       'js'    => ''
     ];
+
+    $config = [
+      'start_day' => 'Sunday',
+      'show_next_prev'  => true,
+      'next_prev_url' => base_url() . 'admin/index'
+    ];
+    $this->calendar->initialize($config);
+    $data['calendar'] = $this->calendar->generate($year, $month);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
@@ -167,5 +179,53 @@ class Admin extends CI_Controller
       $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Menu baru berhasil diubah.</div>');
       redirect('admin/menuCafe');
     }
+  }
+
+  function laporanPenjualan()
+  {
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'penjualan' => $this->am->getPenjualan(),
+      'title' => 'Laporan Penjualan | Areum Cafe',
+      'css'   => 'admin.css',
+      'js'    => 'menuCafe.js'
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/side-navbar', $data);
+    $this->load->view('admin/laporan-penjualan', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function laporanKeuangan()
+  {
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'keuangan' => $this->am->getKeuangan(),
+      'title' => 'Laporan Keuangan | Areum Cafe',
+      'css'   => 'admin.css',
+      'js'    => 'menuCafe.js'
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/side-navbar', $data);
+    $this->load->view('admin/laporan-keuangan', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function laporanPelanggan()
+  {
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'pelanggan' => $this->am->getPelanggan(),
+      'title' => 'Laporan Pelanggan | Areum Cafe',
+      'css'   => 'admin.css',
+      'js'    => 'menuCafe.js'
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/side-navbar', $data);
+    $this->load->view('admin/laporan-pelanggan', $data);
+    $this->load->view('templates/footer', $data);
   }
 }

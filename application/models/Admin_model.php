@@ -139,4 +139,76 @@ class Admin_model extends CI_Model
       return $menu['foto'];
     }
   }
+
+  function getPenjualan()
+  {
+    $sql = "SELECT SUM(`ps`.`qty`) AS `terjual`, `pl`.`tanggal`, `m`.`nama`  FROM `pesanan` AS `ps`
+            JOIN `pelanggan` AS `pl` ON `pl`.`id_pelanggan` = `ps`.`id_pelanggan`
+            JOIN `menu` AS `m` ON `m`.`id_menu` = `ps`.`id_menu`
+            GROUP BY `pl`.`tanggal`, `ps`.`id_menu`
+            ORDER BY `pl`.`tanggal` DESC
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getKeuangan()
+  {
+    $sql = "SELECT `pl`.`tanggal`, `tr`.`id_transaksi`, `u`.`nama`, SUM(`tr`.`total_harga`) AS `pendapatan` 
+            FROM `transaksi` AS `tr` 
+            JOIN `pelanggan` AS `pl` ON `pl`.`id_pelanggan` = `tr`.`id_pelanggan`
+            JOIN `user` AS `u` ON `u`.`id_user` = `tr`.`id_pegawai`
+            GROUP BY `pl`.`tanggal`, `tr`.`id_pegawai`
+            ORDER BY `pl`.`tanggal` DESC
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getPelanggan()
+  {
+    $sql = "SELECT `pl`.`id_pelanggan`, `pl`.`nama_pelanggan`, SUM(`ps`.`qty`) AS `qty`, SUM(`ps`.`subtotal`) AS `subtotal`, `u`.`nama`, `ps`.`status`, `pl`.`tanggal`
+            FROM `pelanggan` AS `pl`
+            JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `pl`.`id_pelanggan`
+            JOIN `user` AS `u` ON `u`.`id_user` = `pl`.`id_waiter`
+            GROUP BY `pl`.`tanggal`, `pl`.`id_pelanggan`
+            ORDER BY `pl`.`tanggal` DESC
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getPegawaiGrafik()
+  {
+    $sql = "SELECT `ha`.`nama_akses`, COUNT(*) AS `total`
+            FROM `user` AS `u` 
+            JOIN `hak_akses` AS `ha` ON `u`.`hak_akses` = `ha`.`id_hak_akses`
+            GROUP BY `ha`.`nama_akses`
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getMenuGrafik()
+  {
+    $sql = "SELECT `jenis`, COUNT(*) AS `total` FROM `menu`
+            GROUP BY `jenis`
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getMenuTerjualGrafik()
+  {
+    $sql = "SELECT `menu`.`jenis`, SUM(`pesanan`.`qty`) AS `total`
+            FROM `pesanan` 
+            JOIN `menu` ON `menu`.`id_menu` = `pesanan`.`id_menu`
+            GROUP BY `menu`.`jenis`
+            ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getStokMenuGrafik()
+  {
+    $sql = "SELECT `jenis`, SUM(`stok`) AS `total`
+            FROM `menu`
+            GROUP BY `jenis`
+          ";
+    return $this->db->query($sql)->result_array();
+  }
 }

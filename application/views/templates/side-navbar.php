@@ -17,17 +17,23 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="<?= base_url('admin/pegawai'); ?>"><i class="fa fa-fw fa-users"></i><span>Pegawai</span></a></li>
     </ul>
-    <!-- <div class="divider"></div>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="<?= base_url('petugas/my_profile'); ?>"><i class="fa fa-fw fa-users"></i><span>Pelanggan</span></a></li>
-    </ul> -->
     <div class="divider"></div>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="<?= base_url('admin/menuCafe'); ?>"><i class="fa fa-fw fa-coffee"></i><span>Menu Cafe</span></a></li>
     </ul>
     <div class="divider"></div>
+    <h6>Laporan</h6>
+    <div class="divider"></div>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="<?= base_url('petugas/my_profile'); ?>"><i class="fa fa-fw fa-file"></i><span>Laporan</span></a></li>
+      <li><a href="<?= base_url('admin/laporanPelanggan'); ?>"><i class="fa fa-fw fa-users"></i><span>Pelanggan</span></a></li>
+    </ul>
+    <div class="divider"></div>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="<?= base_url('admin/laporanPenjualan'); ?>"><i class="fa fa-fw fa-file"></i><span>Penjualan</span></a></li>
+    </ul>
+    <div class="divider"></div>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="<?= base_url('admin/laporanKeuangan'); ?>"><i class="fa fa-fw fa-money"></i><span>Keuangan</span></a></li>
     </ul>
     <div class="divider"></div>
     <div class="divider-end"></div>

@@ -8,7 +8,7 @@ class Cashier_model extends CI_Model {
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `p`.`id_pelanggan`
             JOIN `user` AS `u` ON `u`.`id_user` = `p`.`id_waiter`
             WHERE `ps`.`status` = 'Belum Dibayar'
-            GROUP BY `u`.`nama`
+            GROUP BY `p`.`id_pelanggan`
           ";
 
     return $this->db->query($sql)->result_array();
