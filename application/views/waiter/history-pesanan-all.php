@@ -1,5 +1,12 @@
 <div class="row">
   <div class="col-md-7">
+    <form action="<?= base_url('waiter/history_pesanan_all') ?>" method="POST">
+      <div class="input-group mb-3 input-cari">
+        <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+        <input class="btn btn-cari" type="submit" name="cari"></input>
+        <a href="<?= base_url('waiter/refreshHistoryPesananAll') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+      </div>
+    </form>
     <form action="<?= base_url() ?>waiter/delete_pesanan" method="POST">
       <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus pesanan?')"><i class="fa fa-fw fa-minus-circle"></i> Hapus Pesanan</button>
       <span><a href="<?= base_url() ?>waiter/pesanan" class="btn btn-success btn-tambah-pesanan"><i class="fa fa-fw fa-plus-circle"></i>Tambah Pesanan</a></span>

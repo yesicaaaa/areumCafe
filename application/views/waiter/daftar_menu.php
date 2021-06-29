@@ -1,14 +1,21 @@
 <div class="main">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item bc"><a href="javascript:void(0)">Minuman</a></li>
+      <li class="breadcrumb-item bc"><a href="javascript:void(0)"><?= $group ?></a></li>
       <li class="breadcrumb-item active" aria-current="page"><?= $jenis ?></li>
     </ol>
   </nav>
-  <?php if($menu == null) : ?>
-  <div class="alert alert-danger">
-    Menu tidak tersedia!
-  </div>
+  <form action="<?= base_url('daftarMenu/search/') . $jenis ?>" method="POST">
+    <div class="input-group mb-3 input-cari">
+      <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+      <input class="btn btn-cari" type="submit" name="cari"></input>
+      <a href="<?= base_url('daftarMenu/refresh/') . $jenis ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+    </div>
+  </form>
+  <?php if ($menu == null) : ?>
+    <div class="alert alert-danger">
+      Menu tidak tersedia!
+    </div>
   <?php endif; ?>
   <?php foreach ($menu as $m) : ?>
     <div class="row row-menu">

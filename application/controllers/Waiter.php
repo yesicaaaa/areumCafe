@@ -7,40 +7,36 @@ class Waiter extends CI_Controller
   {
     parent::__construct();
     $this->load->model('waiter_model', 'wm');
-  }
-
-  function index()
-  {
-    $data = [
-      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-      'title' => 'Beranda | Areum Cafe',
-      'css'   => 'waiter.css',
-      'js'    => 'waiter.js'
-    ];
-
-    $this->load->view('templates/header', $data);
-    $this->load->view('templates/navbar-waiter', $data);
-    $this->load->view('waiter/index', $data);
-    $this->load->view('templates/footer', $data);
+    is_logged_in_waiter();
+    $this->session->unset_userdata('keyword');
   }
 
   function pesanan()
   {
-    $this->form_validation->set_rules('nama_pelanggan', 'Nama Pelanggan', 'required');
-    $this->form_validation->set_rules('phone', 'No. Telepon', 'required|max_length[13]');
-    $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
-    $this->form_validation->set_rules('no_meja', 'No. Meja', 'required');
+    $id_waiter = $this->session->userdata('id_user');
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'title' => 'Pesanan | Areum Cafe',
+      'css'   => 'waiter.css',
+      'js'    => 'waiter.js'
+    ];
+    if ($this->input->post('cari')) {
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    } else {
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
+
+    if (!$this->input->post('cari')) {
+      $this->form_validation->set_rules('nama_pelanggan', 'Nama Pelanggan', 'required');
+      $this->form_validation->set_rules('phone', 'No. Telepon', 'required|max_length[13]');
+      $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+      $this->form_validation->set_rules('no_meja', 'No. Meja', 'required');
+    }
+
+    $data['pesanan'] = $this->wm->getPesanan($id_waiter, $data['keyword']);
 
     if ($this->form_validation->run() == false) {
-      $id_waiter = $this->session->userdata('id_user');
-      $data = [
-        'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-        'pesanan' => $this->wm->getPesanan($id_waiter),
-        'title' => 'Pesanan | Areum Cafe',
-        'css'   => 'waiter.css',
-        'js'    => 'waiter.js'
-      ];
-
       $this->load->view('templates/header', $data);
       $this->load->view('templates/navbar-waiter', $data);
       $this->load->view('waiter/pesanan', $data);
@@ -49,6 +45,12 @@ class Waiter extends CI_Controller
       $this->wm->addPelanggan();
       redirect('DaftarMenu/menu_coffee');
     }
+  }
+
+  function refreshPesanan()
+  {
+    $this->session->unset_userdata('keyword');
+    redirect('waiter/pesanan');
   }
 
   function add_to_cart($id)
@@ -60,15 +62,17 @@ class Waiter extends CI_Controller
 
   function delete_pelanggan($id)
   {
-    $data = array();
-    foreach ($_POST['id'] as $key => $val) {
-      $menu = $this->db->get_where('menu',  ['id_menu' => $_POST['id'][$key]])->row_array();
-      $data[] = array(
-        'id_menu' => $_POST['id'][$key],
-        'stok'  => $menu['stok'] + $_POST['stok'][$key]
-      );
+    if($_POST['id']){
+      $data = array();
+      foreach ($_POST['id'] as $key => $val) {
+        $menu = $this->db->get_where('menu',  ['id_menu' => $_POST['id'][$key]])->row_array();
+        $data[] = array(
+          'id_menu' => $_POST['id'][$key],
+          'stok'  => $menu['stok'] + $_POST['stok'][$key]
+        );
+      }
+      $this->db->update_batch('menu', $data, 'id_menu');
     }
-    $this->db->update_batch('menu', $data, 'id_menu');
     $this->wm->delete_pelanggan($id);
     $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pesanan berhasil dibatalkan</div>');
     redirect('waiter/pesanan');
@@ -158,16 +162,29 @@ class Waiter extends CI_Controller
     $id_waiter = $this->session->userdata('id_user');
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-      'dataPesanan' => $this->wm->getHistoryPesanan($id_waiter),
       'title' => 'History Pesanan | Areum Cafe',
       'css'   => 'waiter.css',
       'js'    => 'waiter.js'
     ];
+    if ($this->input->post('cari')) {
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword');
+    } else {
+      $data['keyword'] = $this->session->unset_userdata('keyword');
+    }
+
+    $data['dataPesanan'] = $this->wm->getHistoryPesanan($id_waiter, $data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/navbar-waiter', $data);
     $this->load->view('waiter/history-pesanan-all', $data);
     $this->load->view('templates/footer', $data);
+  }
+
+  function refreshHistoryPesananAll()
+  {
+    $this->session->unset_userdata('keyword');
+    redirect('waiter/history_pesanan_all');
   }
 
   function delete_cart($rowid, $id, $qty)

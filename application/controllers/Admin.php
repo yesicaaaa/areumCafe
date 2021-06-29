@@ -8,6 +8,7 @@ class Admin extends CI_Controller
     parent::__construct();
     $this->load->model('Admin_model', 'am');
     is_logged_in_admin();
+    $this->session->unset_userdata('keyword');
   }
 
   function index($year = null, $month = null)
@@ -39,21 +40,31 @@ class Admin extends CI_Controller
 
   function pegawai()
   {
-    $this->form_validation->set_rules('nama', 'Nama', 'required');
-    $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
-    $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]');
-    $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'hak_akses' => $this->db->get('hak_akses')->result_array(),
+      'title' => 'Pegawai | Areum Cafe',
+      'css'   => 'admin.css',
+      'js'    => 'pegawai_add.js'
+    ];
+
+    if ($this->input->post('cari')) {
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    } else {
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
+
+    if (!$this->input->post('cari')) {
+      $this->form_validation->set_rules('nama', 'Nama', 'required');
+      $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
+      $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]');
+      $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
+    }
+
+    $data['pegawai']  = $this->am->getDataPegawai($data['keyword']);
 
     if ($this->form_validation->run() == false) {
-      $data = [
-        'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-        'pegawai' => $this->am->getDataPegawai(),
-        'hak_akses' => $this->db->get('hak_akses')->result_array(),
-        'title' => 'Pegawai | Areum Cafe',
-        'css'   => 'admin.css',
-        'js'    => 'pegawai_add.js'
-      ];
-
       $this->load->view('templates/header', $data);
       $this->load->view('templates/side-navbar', $data);
       $this->load->view('admin/pegawai', $data);
@@ -84,19 +95,28 @@ class Admin extends CI_Controller
 
   function editPegawai()
   {
-    $this->form_validation->set_rules('nama', 'Nama', 'required');
-    $this->form_validation->set_rules('hak_akses', 'Hak Akses', 'required');
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'hak_akses' => $this->db->get('hak_akses')->result_array(),
+      'title' => 'Pegawai | Areum Cafe',
+      'css'   => 'admin.css',
+      'js'    => 'pegawai_add.js'
+    ];
+    if($this->input->post('cari')){
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    }else {
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
 
+    if(!$this->input->post('cari')){
+      $this->form_validation->set_rules('nama', 'Nama', 'required');
+      $this->form_validation->set_rules('hak_akses', 'Hak Akses', 'required');
+    }
+
+    $data['pegawai'] = $this->am->getDataPegawai($data['keyword']);
+    
     if ($this->form_validation->run() == false) {
-      $data = [
-        'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-        'pegawai' => $this->am->getDataPegawai(),
-        'hak_akses' => $this->db->get('hak_akses')->result_array(),
-        'title' => 'Pegawai | Areum Cafe',
-        'css'   => 'admin.css',
-        'js'    => 'pegawai_add.js'
-      ];
-
       $this->load->view('templates/header', $data);
       $this->load->view('templates/side-navbar', $data);
       $this->load->view('admin/pegawai', $data);
@@ -108,23 +128,38 @@ class Admin extends CI_Controller
     }
   }
 
+  function refreshPegawai()
+  {
+    $this->session->unset_userdata('keyword');
+    redirect('admin/pegawai');
+  }
+
   function menuCafe()
   {
-    $this->form_validation->set_rules('nama', 'Nama Menu', 'required');
-    $this->form_validation->set_rules('harga', 'Harga', 'required');
-    $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
-    $this->form_validation->set_rules('jenis', 'Jenis Menu', 'required');
-    $this->form_validation->set_rules('stok', 'Stok Menu', 'required');
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'title' => 'Menu Cafe | Areum Cafe',
+      'css'   => 'admin.css',
+      'js'    => 'menuCafe.js'
+    ];
+    if($this->input->post('cari')){
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    }else{
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
+
+    if(!$this->input->post('cari')){
+      $this->form_validation->set_rules('nama', 'Nama Menu', 'required');
+      $this->form_validation->set_rules('harga', 'Harga', 'required');
+      $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
+      $this->form_validation->set_rules('jenis', 'Jenis Menu', 'required');
+      $this->form_validation->set_rules('stok', 'Stok Menu', 'required');
+    }
+
+    $data['menu'] = $this->am->getDataMenu($data['keyword']);
 
     if ($this->form_validation->run() == false) {
-      $data = [
-        'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-        'menu'  => $this->am->getDataMenu(),
-        'title' => 'Menu Cafe | Areum Cafe',
-        'css'   => 'admin.css',
-        'js'    => 'menuCafe.js'
-      ];
-
       $this->load->view('templates/header', $data);
       $this->load->view('templates/side-navbar', $data);
       $this->load->view('admin/menu-cafe', $data);
@@ -149,27 +184,36 @@ class Admin extends CI_Controller
   {
     $id_menu = $this->input->post('id_menu');
     $menu = $this->db->get_where('menu', ['id_menu' => $id_menu])->row_array();
-    
+
     echo json_encode($menu);
   }
 
   function editMenu()
   {
-    $this->form_validation->set_rules('nama', 'Nama Menu', 'required');
-    $this->form_validation->set_rules('harga', 'Harga', 'required');
-    $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
-    $this->form_validation->set_rules('jenis', 'Jenis Menu', 'required');
-    $this->form_validation->set_rules('stok', 'Stok Menu', 'required');
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'title' => 'Menu Cafe | Areum Cafe',
+      'css'   => 'admin.css',
+      'js'    => 'menuCafe.js'
+    ];
+    if($this->input->post('cari')){
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    }else{
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
+
+    if(!$this->input->post('cari')){
+      $this->form_validation->set_rules('nama', 'Nama Menu', 'required');
+      $this->form_validation->set_rules('harga', 'Harga', 'required');
+      $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
+      $this->form_validation->set_rules('jenis', 'Jenis Menu', 'required');
+      $this->form_validation->set_rules('stok', 'Stok Menu', 'required');
+    }
+
+    $data['menu'] = $this->am->getDataMenu($data['keyword']);
 
     if ($this->form_validation->run() == false) {
-      $data = [
-        'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-        'menu'  => $this->am->getDataMenu(),
-        'title' => 'Menu Cafe | Areum Cafe',
-        'css'   => 'admin.css',
-        'js'    => 'menuCafe.js'
-      ];
-
       $this->load->view('templates/header', $data);
       $this->load->view('templates/side-navbar', $data);
       $this->load->view('admin/menu-cafe', $data);
@@ -181,15 +225,28 @@ class Admin extends CI_Controller
     }
   }
 
+  function refreshMenuCafe()
+  {
+    $this->session->unset_userdata('keyword');
+    redirect('admin/menuCafe');
+  }
+
   function laporanPenjualan()
   {
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-      'penjualan' => $this->am->getPenjualan(),
       'title' => 'Laporan Penjualan | Areum Cafe',
       'css'   => 'admin.css',
       'js'    => 'menuCafe.js'
     ];
+    if($this->input->post('cari')){
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    }else{
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
+
+    $data['penjualan'] = $this->am->getPenjualan($data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
@@ -197,15 +254,28 @@ class Admin extends CI_Controller
     $this->load->view('templates/footer', $data);
   }
 
+  function refreshLaporanPenjualan()
+  {
+    $this->session->unset_userdata('keyword');
+    redirect('admin/laporanPenjualan');
+  }
+
   function laporanKeuangan()
   {
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-      'keuangan' => $this->am->getKeuangan(),
       'title' => 'Laporan Keuangan | Areum Cafe',
       'css'   => 'admin.css',
       'js'    => 'menuCafe.js'
     ];
+    if($this->input->post('cari')){
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    }else{
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
+
+    $data['keuangan'] = $this->am->getKeuangan($data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
@@ -213,19 +283,38 @@ class Admin extends CI_Controller
     $this->load->view('templates/footer', $data);
   }
 
+  function refreshLaporanKeuangan()
+  {
+    $this->session->unset_userdata('keyword');
+    redirect('admin/laporanKeuangan');
+  }
+
   function laporanPelanggan()
   {
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-      'pelanggan' => $this->am->getPelanggan(),
       'title' => 'Laporan Pelanggan | Areum Cafe',
       'css'   => 'admin.css',
       'js'    => 'menuCafe.js'
     ];
+    if($this->input->post('cari')){
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    }else{
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
+
+    $data['pelanggan'] = $this->am->getPelanggan($data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
     $this->load->view('admin/laporan-pelanggan', $data);
     $this->load->view('templates/footer', $data);
+  }
+
+  function refreshLaporanPelanggan()
+  {
+    $this->session->unset_userdata('keyword');
+    redirect('admin/laporanPelanggan');
   }
 }

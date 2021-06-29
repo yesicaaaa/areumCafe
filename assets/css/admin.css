@@ -129,7 +129,7 @@ label span {
 }
 
 .divider-end {
-  margin-top: 97%;
+  margin-top: 79%;
   border-bottom: 2px solid #3e5241;
 }
 
@@ -211,4 +211,33 @@ label span {
 .chartimg img {
   width: 80%;
   margin: 10px 0 0 160px;
+}
+
+.input-cari {
+  width: 35%;
+  margin: 15px 0 22px 0 !important;
+}
+
+.input-cari input {
+  height: 35px;
+}
+
+.btn-cari {
+  border-color: #b77842;
+  height: 35px;
+}
+
+.btn-cari:hover {
+  background-color: #b77842;
+  color: white;
+}
+
+.refresh {
+  font-size: 25px !important;
+  margin: -1px 0 0 13px !important;
+  color: #374939;
+}
+
+.refresh:hover {
+  color: #b77842;
 }

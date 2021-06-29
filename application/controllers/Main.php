@@ -80,7 +80,8 @@ class Main extends CI_Controller {
 
   function signout()
   {
-    $this->session->unset_userdata('');
+    $data = array('id_user', 'email', 'nama', 'hak_akses');
+    $this->session->unset_userdata($data);
     $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil keluar akun</div>');
     redirect('main/signIn');
   }
@@ -88,6 +89,21 @@ class Main extends CI_Controller {
   function time()
   {
     $this->load->view('time');
+  }
+
+  function blockedCashier()
+  {
+    $this->load->view('blocked-cashier');
+  }
+
+  function blockedWaiter()
+  {
+    $this->load->view('blocked-waiter');
+  }
+
+  function blockedAdmin()
+  {
+    $this->load->view('blocked-admin');
   }
 }
 

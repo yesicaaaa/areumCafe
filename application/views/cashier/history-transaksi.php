@@ -1,5 +1,12 @@
 <div class="row">
   <div class="col-md-7">
+    <form action="<?= base_url('cashier/history_transaksi') ?>" method="POST">
+      <div class="input-group mb-3 input-cari">
+        <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+        <input class="btn btn-cari" type="submit" name="cari"></input>
+        <a href="<?= base_url('cashier/refreshHistoryTransaksi') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+      </div>
+    </form>
     <table class="table">
       <thead class="table-brown">
         <tr>
@@ -28,13 +35,13 @@
               <a href="<?= base_url('cashier/history_transaksi_view/') . $dp['id_pelanggan'] ?>" class="badge bg-success">Lihat</a>
             </td>
           </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-      <?php if ($dataPelanggan == null) : ?>
-        <div class="alert alert-danger">
-          Tidak ada history transaksi
-        </div>
-      <?php endif; ?>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+    <?php if ($dataPelanggan == null) : ?>
+      <div class="alert alert-danger">
+        Tidak ada history transaksi
+      </div>
+    <?php endif; ?>
   </div>
 </div>

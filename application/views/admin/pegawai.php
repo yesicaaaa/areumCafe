@@ -5,6 +5,13 @@
     </ol>
   </nav>
   <?= $this->session->flashdata('message'); ?>
+  <form action="<?= base_url('admin/pegawai') ?>" method="POST">
+    <div class="input-group mb-3 input-cari">
+      <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+      <input class="btn btn-cari" type="submit" name="cari"></input>
+      <a href="<?= base_url('admin/refreshPegawai') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+    </div>
+  </form>
   <div class="form-tambah">
     <h6>
       Tambah Pegawai

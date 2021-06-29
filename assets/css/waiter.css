@@ -373,3 +373,32 @@ li.breadcrumb-item::before {
 	margin-top: 10px;
 	margin-bottom: -20px;
 }
+
+.input-cari {
+	width: 50%;
+	margin: 15px 0 0px 11px !important;
+}
+
+.input-cari input {
+	height: 35px;
+}
+
+.btn-cari {
+	border-color: #b77842;
+	height: 35px;
+}
+
+.btn-cari:hover {
+	background-color: #b77842;
+	color: white;
+}
+
+.refresh {
+	font-size: 25px !important;
+	margin: -1px 0 0 13px !important;
+	color: #374939 !important;
+}
+
+.refresh:hover {
+	color: #b77842;
+}

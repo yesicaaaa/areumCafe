@@ -4,6 +4,13 @@
       <li class="breadcrumb-item active" aria-current="page">Laporan Keuangan</li>
     </ol>
   </nav>
+  <form action="<?= base_url('admin/laporanKeuangan') ?>" method="POST">
+    <div class="input-group mb-3 input-cari">
+      <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+      <input class="btn btn-cari" type="submit" name="cari"></input>
+      <a href="<?= base_url('admin/refreshLaporanKeuangan') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+    </div>
+  </form>
   <table class="table">
     <thead class="table-color">
       <tr>
@@ -25,4 +32,9 @@
       <?php endforeach; ?>
     </tbody>
   </table>
+  <?php if ($keuangan == null) : ?>
+    <div class="alert alert-danger">
+      Tidak ada data!
+    </div>
+  <?php endif; ?>
 </div>

@@ -4,6 +4,13 @@
       <li class="breadcrumb-item active" aria-current="page">Laporan Penjualan</li>
     </ol>
   </nav>
+  <form action="<?= base_url('admin/laporanPenjualan') ?>" method="POST">
+    <div class="input-group mb-3 input-cari">
+      <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+      <input class="btn btn-cari" type="submit" name="cari"></input>
+      <a href="<?= base_url('admin/refreshLaporanPenjualan') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+    </div>
+  </form>
   <table class="table">
     <thead class="table-color">
       <tr>

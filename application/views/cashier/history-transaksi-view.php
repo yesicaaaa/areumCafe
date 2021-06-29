@@ -1,5 +1,12 @@
 <div class="row">
   <div class="col-md-7">
+    <form action="<?= base_url('cashier/history_transaksi') ?>" method="POST">
+      <div class="input-group mb-3 input-cari">
+        <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+        <input class="btn btn-cari" type="submit" name="cari"></input>
+        <a href="<?= base_url('cashier/refreshHistoryTransaksi') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+      </div>
+    </form>
     <table class="table">
       <thead class="table-brown">
         <tr>
@@ -68,7 +75,7 @@
           <p><b><?= $p['qty'] ?></b>x <?= $p['nama'] ?></p>
         </div>
         <div class="col-md-3">
-          <b><?= number_format($p['subtotal'],0, ',', '.') ?></b>
+          <b><?= number_format($p['subtotal'], 0, ',', '.') ?></b>
         </div>
       </div>
     <?php endforeach; ?>

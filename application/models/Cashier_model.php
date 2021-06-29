@@ -2,12 +2,13 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Cashier_model extends CI_Model {
-  function getDataPelanggan()
+  function getDataPelanggan($keyword = null)
   {
     $sql = "SELECT * FROM `pelanggan` AS `p`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `p`.`id_pelanggan`
             JOIN `user` AS `u` ON `u`.`id_user` = `p`.`id_waiter`
             WHERE `ps`.`status` = 'Belum Dibayar'
+            AND `p`.`nama_pelanggan` LIKE '%$keyword%'
             GROUP BY `p`.`id_pelanggan`
           ";
 
@@ -43,13 +44,14 @@ class Cashier_model extends CI_Model {
     $this->db->update('pesanan', $status);
   }
 
-  function getAllDataPelanggan($id_cashier)
+  function getAllDataPelanggan($id_cashier, $keyword = null)
   {
     $sql = "SELECT * FROM `pelanggan` AS `p`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `p`.`id_pelanggan`
             JOIN `transaksi` AS `t` ON `t`.`id_pelanggan` = `p`.`id_pelanggan`
             JOIN `user` AS `u` ON `u`.`id_user` = `p`.`id_waiter`
             WHERE `t`.`id_pegawai` = $id_cashier
+            AND `p`.`nama_pelanggan` LIKE '%$keyword%'
             AND `ps`.`status` = 'Sudah Dibayar'
             GROUP BY `p`.`nama_pelanggan`
           ";
@@ -65,4 +67,3 @@ class Cashier_model extends CI_Model {
     return $this->db->query($sql)->row_array();
   }
 }
-?>

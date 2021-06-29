@@ -3,11 +3,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin_model extends CI_Model
 {
-  function getDataPegawai()
+  function getDataPegawai($keyword = null)
   {
     $sql = "SELECT * FROM `user` as `u`
             JOIN `hak_akses` as `ha`
             ON `ha`.`id_hak_akses` = `u`.`hak_akses`
+            WHERE `u`.`nama` LIKE '%$keyword%'
+            OR `u`.`email` LIKE '%$keyword%'
+            OR `ha`.`nama_akses` LIKE '%$keyword%'
           ";
 
     return $this->db->query($sql)->result_array();
@@ -52,9 +55,16 @@ class Admin_model extends CI_Model
     return $this->db->query($sql)->row_array();
   }
 
-  function getDataMenu()
+  function getDataMenu($keyword = null)
   {
-    return $this->db->get('menu')->result_array();
+    $sql = "SELECT * FROM `menu`
+            WHERE `nama` LIKE '%$keyword%'
+            OR `harga` LIKE '$keyword%%'
+            OR `deskripsi` LIKE '%$keyword%'
+            OR `jenis` LIKE '%$keyword%'
+            OR `stok` LIKE '%$keyword%'
+          ";
+    return $this->db->query($sql)->result_array();
   }
 
   function addMenu()
@@ -140,35 +150,44 @@ class Admin_model extends CI_Model
     }
   }
 
-  function getPenjualan()
+  function getPenjualan($keyword = null)
   {
     $sql = "SELECT SUM(`ps`.`qty`) AS `terjual`, `pl`.`tanggal`, `m`.`nama`  FROM `pesanan` AS `ps`
             JOIN `pelanggan` AS `pl` ON `pl`.`id_pelanggan` = `ps`.`id_pelanggan`
             JOIN `menu` AS `m` ON `m`.`id_menu` = `ps`.`id_menu`
+            WHERE `pl`.`tanggal` LIKE '%$keyword%'
+            OR `m`.`nama` LIKE '%$keyword%'
             GROUP BY `pl`.`tanggal`, `ps`.`id_menu`
             ORDER BY `pl`.`tanggal` DESC
           ";
     return $this->db->query($sql)->result_array();
   }
 
-  function getKeuangan()
+  function getKeuangan($keyword = null)
   {
     $sql = "SELECT `pl`.`tanggal`, `tr`.`id_transaksi`, `u`.`nama`, SUM(`tr`.`total_harga`) AS `pendapatan` 
             FROM `transaksi` AS `tr` 
             JOIN `pelanggan` AS `pl` ON `pl`.`id_pelanggan` = `tr`.`id_pelanggan`
             JOIN `user` AS `u` ON `u`.`id_user` = `tr`.`id_pegawai`
+            WHERE `pl`.`tanggal` LIKE '%$keyword%'
+            OR `u`.`nama` LIKE '%$keyword%'
             GROUP BY `pl`.`tanggal`, `tr`.`id_pegawai`
             ORDER BY `pl`.`tanggal` DESC
           ";
     return $this->db->query($sql)->result_array();
   }
 
-  function getPelanggan()
+  function getPelanggan($keyword = null)
   {
     $sql = "SELECT `pl`.`id_pelanggan`, `pl`.`nama_pelanggan`, SUM(`ps`.`qty`) AS `qty`, SUM(`ps`.`subtotal`) AS `subtotal`, `u`.`nama`, `ps`.`status`, `pl`.`tanggal`
             FROM `pelanggan` AS `pl`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `pl`.`id_pelanggan`
             JOIN `user` AS `u` ON `u`.`id_user` = `pl`.`id_waiter`
+            WHERE `pl`.`id_pelanggan` LIKE '%$keyword%'
+            OR `pl`.`tanggal` LIKE '%$keyword%'
+            OR `pl`.`nama_pelanggan` LIKE '%$keyword%'
+            OR `u`.`nama` LIKE '%$keyword%'
+            OR `ps`.`status` LIKE '%$keyword%'
             GROUP BY `pl`.`tanggal`, `pl`.`id_pelanggan`
             ORDER BY `pl`.`tanggal` DESC
           ";

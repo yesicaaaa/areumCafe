@@ -3,12 +3,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Waiter_model extends CI_Model
 {
-  function getPesanan($id_waiter)
+  function getPesanan($id_waiter, $keyword = null)
   {
     $sql = "SELECT * FROM `pelanggan` AS `pl`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `pl`.`id_pelanggan`
             JOIN `user` AS `u` ON `u`.`id_user` = `pl`.`id_waiter`
             WHERE `pl`.`id_waiter` = $id_waiter
+            -- AND `pl`.`tanggal` LIKE '%$keyword%'
+            AND `pl`.`nama_pelanggan` LIKE '%$keyword%'
+            -- OR `pl`.`phone` LIKE '%$keyword%'
+            -- OR `pl`.`no_meja` LIKE '%$keyword%'
+            -- OR `u`.`nama` LIKE '%$keyword%'
             AND `ps`.`status` = 'Dipesan'
             GROUP BY `pl`.`nama_pelanggan`
           ";
@@ -16,12 +21,13 @@ class Waiter_model extends CI_Model
     return $this->db->query($sql)->result_array();
   }
 
-  function getHistoryPesanan($id_waiter)
+  function getHistoryPesanan($id_waiter, $keyword = null)
   {
     $sql = "SELECT * FROM `pelanggan` AS `pl`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `pl`.`id_pelanggan`
             JOIN `user` AS `u` ON `u`.`id_user` = `pl`.`id_waiter`
             WHERE `pl`.`id_waiter` = $id_waiter
+            AND `pl`.`nama_pelanggan` LIKE '%$keyword%'
             AND `ps`.`status` != 'Dipesan'
             GROUP BY `pl`.`nama_pelanggan`
           ";
