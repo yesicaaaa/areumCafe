@@ -60,7 +60,6 @@ class Admin_model extends CI_Model
     $sql = "SELECT * FROM `menu`
             WHERE `nama` LIKE '%$keyword%'
             OR `harga` LIKE '$keyword%%'
-            OR `deskripsi` LIKE '%$keyword%'
             OR `jenis` LIKE '%$keyword%'
             OR `stok` LIKE '%$keyword%'
           ";
@@ -227,6 +226,73 @@ class Admin_model extends CI_Model
     $sql = "SELECT `jenis`, SUM(`stok`) AS `total`
             FROM `menu`
             GROUP BY `jenis`
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getDataExportPegawai($keyword = null)
+  {
+    $sql = "SELECT * FROM `user`
+            JOIN `hak_akses` ON `hak_akses`.`id_hak_akses` = `user`.`hak_akses`
+            WHERE `user`.`nama` LIKE '%$keyword%'
+            OR `user`.`email` LIKE '%$keyword%'
+            OR `hak_akses`.`nama_akses` LIKE '%$keyword%'
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getDataExportMenuCafe($keyword = null)
+  {
+    $sql = "SELECT * FROM `menu`
+            WHERE `nama` LIKE '%$keyword%'
+            OR `harga` LIKE '%$keyword%'
+            OR `jenis` LIKE '%$keyword%'
+            OR `stok` LIKE '%$keyword%'
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getDataExportLaporanPenjualan($keyword = null)
+  {
+    $sql = "SELECT `pl`.`tanggal`, `m`.`nama`, SUM(`ps`.`qty`) AS `terjual`
+            FROM `pesanan` AS `ps`
+            JOIN `pelanggan` AS `pl` ON `pl`.`id_pelanggan` = `ps`.`id_pelanggan`
+            JOIN `menu` AS `m` ON `m`.`id_menu` = `ps`.`id_menu`
+            WHERE `pl`.`tanggal` LIKE '%$keyword%'
+            OR `m`.`nama` LIKE '%$keyword%'
+            GROUP BY `pl`.`tanggal`, `ps`.`id_menu`
+            ORDER BY `pl`.`tanggal` DESC
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getDataExportLaporanPelanggan($keyword = null)
+  {
+    $sql = "SELECT `pl`.`id_pelanggan`, `pl`.`tanggal`, `pl`.`nama_pelanggan`, SUM(`ps`.`qty`) AS `qty`, SUM(`ps`.`subtotal`) AS `subtotal`, `u`.`nama`, `ps`.`status`
+            FROM `pelanggan` AS `pl`
+            JOIN `pesanan` AS `ps` ON `pl`.`id_pelanggan` = `ps`.`id_pelanggan`
+            JOIN `user` AS `u` ON `u`.`id_user` = `pl`.`id_waiter`
+            WHERE `pl`.`id_pelanggan` LIKE '%$keyword%'
+            OR `pl`.`tanggal` LIKE '%$keyword%'
+            OR `pl`.`nama_pelanggan` LIKE '%$keyword%'
+            OR `u`.`nama` LIKE '%$keyword%'
+            OR `ps`.`status` LIKE '%$keyword%'
+            GROUP BY `pl`.`tanggal`, `pl`.`id_pelanggan`
+            ORDER BY `pl`.`tanggal` DESC
+          ";
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getDataExportLaporanKeuangan($keyword = null)
+  {
+    $sql = "SELECT `pl`.`tanggal`, `u`.`nama`, SUM(`tr`.`total_harga`) AS `pendapatan`
+            FROM `transaksi` AS `tr` 
+            JOIN `pelanggan` AS `pl` ON `pl`.`id_pelanggan` = `tr`.`id_pelanggan`
+            JOIN `user` AS `u` ON `u`.`id_user` = `tr`.`id_pegawai`
+            WHERE `pl`.`tanggal` LIKE '%$keyword%'
+            OR `u`.`nama` LIKE '%$keyword%'
+            GROUP BY `pl`.`tanggal`, `tr`.`id_pegawai`
+            ORDER BY `pl`.`tanggal` DESC
           ";
     return $this->db->query($sql)->result_array();
   }

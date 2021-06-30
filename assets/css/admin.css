@@ -214,8 +214,8 @@ label span {
 }
 
 .input-cari {
-  width: 35%;
-  margin: 15px 0 22px 0 !important;
+  width: 70%;
+  margin: 2px 0 22px -80px !important;
 }
 
 .input-cari input {
@@ -240,4 +240,13 @@ label span {
 
 .refresh:hover {
   color: #b77842;
+}
+
+.btn-excel {
+  border-radius: 0;
+}
+
+.btn-pdf {
+  margin-left: -42px;
+  border-radius: 0;
 }

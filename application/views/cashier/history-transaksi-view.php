@@ -116,5 +116,6 @@
       <input type="text" class="form-control" id="total_bayar" value="Rp<?= number_format($transaksi['kembalian'], 0, ',', '.') ?>" readonly>
       <label for="total_bayar">Total kembalian</label>
     </div>
+    <a href="<?= base_url('cashier/strukPembelian/') . $pelanggan['id_pelanggan'] ?>" class="btn btn-success btn-struk" onclick="return confirm('Yakin ingin mengunduh struk pembayaran?')"><i class="fa fa-fw fa-download"></i>Struk Pembayaran</a>
   </div>
 </div>

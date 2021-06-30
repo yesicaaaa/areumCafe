@@ -402,3 +402,12 @@ li.breadcrumb-item::before {
 .refresh:hover {
 	color: #b77842;
 }
+
+.btn-excel {
+	border-radius: 0;
+}
+
+.btn-pdf {
+	margin-left: -42px;
+	border-radius: 0;
+}

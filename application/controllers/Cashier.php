@@ -1,5 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+require('./application/third_party/phpoffice/vendor/autoload.php');
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Cashier extends CI_Controller
 {
@@ -18,10 +22,10 @@ class Cashier extends CI_Controller
       'css'   => 'cashier.css',
       'js'    => 'cashier.js'
     ];
-    if($this->input->post('cari')){
+    if ($this->input->post('cari')) {
       $data['keyword'] = $this->input->post('keyword');
       $this->session->set_userdata('keyword', $data['keyword']);
-    }else{
+    } else {
       $data['keyword'] = $this->session->userdata('keyword');
     }
 
@@ -143,5 +147,20 @@ class Cashier extends CI_Controller
   {
     $this->session->unset_userdata('keyword');
     redirect('cashier/history_transaksi');
+  }
+
+  function strukPembelian($id_pelanggan)
+  {
+    $id_cashier = $this->session->userdata('id_user');
+    $data = [
+      'dataPelanggan' => $this->cm->getAllDataPelanggan($id_cashier),
+      'pelanggan' => $this->db->get_where('pelanggan', ['id_pelanggan' => $id_pelanggan])->row_array(),
+      'pesanan' => $this->cm->getPesananPelanggan($id_pelanggan),
+      'total_pesanan' => $this->db->get_where('total_pesanan', ['id_pelanggan' => $id_pelanggan])->row_array(),
+      'transaksi' => $this->cm->getDataTransaksi($id_pelanggan)
+    ];
+$this->load->view('cashier/struk-pembayaran', $data);
+    // $this->pdfdom->setPaper('A4', 'potrait');
+    // $this->pdfdom->load_view('cashier/struk-pembayaran', $data);
   }
 }

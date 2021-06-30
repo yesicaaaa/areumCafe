@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col-md-7">
-    <form action="<?= base_url('cashier/transaksi')?>" method="POST">
+    <form action="<?= base_url('cashier/transaksi') ?>" method="POST">
       <div class="input-group mb-3 input-cari">
         <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
         <input class="btn btn-cari" type="submit" name="cari"></input>
-        <a href="<?= base_url('cashier/refreshTransaksi')?>" class="refresh"><i class="fa fa-refresh"></i></a>
+        <a href="<?= base_url('cashier/refreshTransaksi') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
       </div>
     </form>
     <table class="table">

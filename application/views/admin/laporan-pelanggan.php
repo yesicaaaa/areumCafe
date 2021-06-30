@@ -4,13 +4,23 @@
       <li class="breadcrumb-item active" aria-current="page">Laporan Pelanggan</li>
     </ol>
   </nav>
-  <form action="<?= base_url('admin/laporanPelanggan') ?>" method="POST">
-    <div class="input-group mb-3 input-cari">
-      <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
-      <input class="btn btn-cari" type="submit" name="cari"></input>
-      <a href="<?= base_url('admin/refreshLaporanPelanggan') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+  <div class="row">
+    <div class="col-md-2">
+      <a href="<?= base_url('admin/printExcelLaporanPelanggan/') . $this->session->userdata('keyword'); ?>" class="btn btn-success btn-excel" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export Excel</a>
     </div>
-  </form>
+    <div class="col-md-2">
+      <a href="<?= base_url('admin/printPdfLaporanPelanggan/') . $this->session->userdata('keyword'); ?>" class="btn btn-danger btn-pdf" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export PDF</a>
+    </div>
+    <div class="col-md-6">
+      <form action="<?= base_url('admin/laporanPelanggan') ?>" method="POST">
+        <div class="input-group mb-3 input-cari">
+          <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+          <input class="btn btn-cari" type="submit" name="cari"></input>
+          <a href="<?= base_url('admin/refreshLaporanPelanggan') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+        </div>
+      </form>
+    </div>
+  </div>
   <table class="table">
     <thead class="table-color">
       <tr>
@@ -33,7 +43,7 @@
           <td><?= $p['tanggal'] ?></td>
           <td><?= $p['nama_pelanggan'] ?></td>
           <td><?= $p['qty'] ?></td>
-          <td><?= $p['subtotal'] ?></td>
+          <td>Rp<?= number_format($p['subtotal'], 0, ',', '.') ?></td>
           <td><?= $p['nama'] ?></td>
           <td><?= $p['status'] ?></td>
         </tr>

@@ -51,7 +51,7 @@ a:hover {
 }
 
 .table {
-  margin-top: 30px;
+  margin-top: 10px;
   margin-left: 10px;
   width: 112%;
 }
@@ -138,8 +138,8 @@ a:hover {
 }
 
 .input-cari {
-	width: 47%;
-	margin: 15px 0 -15px 11px !important;
+	width: 55%;
+	margin: 17px 0 0px 11px !important;
 }
 
 .input-cari input {
@@ -164,4 +164,21 @@ a:hover {
 
 .refresh:hover {
 	color: #b77842 !important;
+}
+
+.btn-excel {
+	border-radius: 0;
+	width: 124%;
+	margin: 15px 0 0 11px;
+}
+
+.btn-pdf {
+	margin-left: 27px;
+	border-radius: 0;
+	width: 118%;
+}
+
+.btn-struk {
+	width: 100%;
+	border-radius: 0;
 }

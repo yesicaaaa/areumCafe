@@ -75,7 +75,7 @@
           <p><b><?= $p['qty'] ?></b>x <?= $p['nama'] ?></p>
         </div>
         <div class="col-md-3">
-          <b><?= $p['subtotal'] ?></b>
+          <b><?= number_format($p['subtotal'], 0, ',', '.') ?></b>
         </div>
       </div>
     <?php endforeach; ?>

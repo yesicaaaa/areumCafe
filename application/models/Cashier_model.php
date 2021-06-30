@@ -66,4 +66,10 @@ class Cashier_model extends CI_Model {
           ";
     return $this->db->query($sql)->row_array();
   }
+
+  function getDataExportTransaksi($keyword = null) 
+  {
+    $sql = "
+          ";
+  }
 }

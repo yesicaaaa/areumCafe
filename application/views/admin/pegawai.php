@@ -4,14 +4,24 @@
       <li class="breadcrumb-item active" aria-current="page">Data Pegawai</li>
     </ol>
   </nav>
-  <?= $this->session->flashdata('message'); ?>
-  <form action="<?= base_url('admin/pegawai') ?>" method="POST">
-    <div class="input-group mb-3 input-cari">
-      <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
-      <input class="btn btn-cari" type="submit" name="cari"></input>
-      <a href="<?= base_url('admin/refreshPegawai') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+  <div class="row">
+    <div class="col-md-2">
+      <a href="<?= base_url('admin/printExcelPegawai/') . $this->session->userdata('keyword'); ?>" class="btn btn-success btn-excel" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export Excel</a>
     </div>
-  </form>
+    <div class="col-md-2">
+      <a href="<?= base_url('admin/printPdfPegawai/') . $this->session->userdata('keyword');?>" class="btn btn-danger btn-pdf" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export PDF</a>
+    </div>
+    <div class="col-md-6">
+      <form action="<?= base_url('admin/pegawai') ?>" method="POST">
+        <div class="input-group mb-3 input-cari">
+          <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
+          <input class="btn btn-cari" type="submit" name="cari"></input>
+          <a href="<?= base_url('admin/refreshPegawai') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <?= $this->session->flashdata('message'); ?>
   <div class="form-tambah">
     <h6>
       Tambah Pegawai
