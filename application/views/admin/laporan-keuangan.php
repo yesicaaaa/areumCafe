@@ -31,10 +31,9 @@
       </tr>
     </thead>
     <tbody>
-      <?php $i = 1; ?>
       <?php foreach ($keuangan as $k) : ?>
         <tr>
-          <th scope="row"><?= $i++ ?></th>
+          <th scope="row"><?= ++$start ?></th>
           <td><?= $k['tanggal'] ?></td>
           <td><?= $k['nama'] ?></td>
           <td>Rp<?= number_format($k['pendapatan'], 0, ',', '.') ?></td>
@@ -47,4 +46,8 @@
       Tidak ada data!
     </div>
   <?php endif; ?>
+  <p class="total-rows">Total Data : <?= $total_rows ?></p>
+  <div class="pagination">
+    <?= $this->pagination->create_links(); ?>
+  </div>
 </div>

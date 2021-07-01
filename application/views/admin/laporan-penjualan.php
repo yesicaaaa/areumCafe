@@ -31,10 +31,9 @@
       </tr>
     </thead>
     <tbody>
-      <?php $i = 1; ?>
       <?php foreach ($penjualan as $p) : ?>
         <tr>
-          <th scope="row"><?= $i++ ?></th>
+          <th scope="row"><?= ++$start ?></th>
           <td><?= $p['tanggal'] ?></td>
           <td><?= $p['nama'] ?></td>
           <td><?= $p['terjual'] ?></td>
@@ -42,4 +41,8 @@
       <?php endforeach; ?>
     </tbody>
   </table>
+  <p class="total-rows">Total Data : <?= $total_rows ?></p>
+  <div class="pagination">
+    <?= $this->pagination->create_links(); ?>
+  </div>
 </div>

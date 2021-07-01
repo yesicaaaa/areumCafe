@@ -12,7 +12,6 @@ class Admin extends CI_Controller
     parent::__construct();
     $this->load->model('Admin_model', 'am');
     is_logged_in_admin();
-    $this->session->unset_userdata('keyword');
   }
 
   function index($year = null, $month = null)
@@ -59,14 +58,29 @@ class Admin extends CI_Controller
       $data['keyword'] = $this->session->userdata('keyword');
     }
 
+    $config['base_url'] = 'http://localhost/areumCafe/admin/pegawai';
+    $this->db->like('user.nama', $data['keyword']);
+    $this->db->or_like('user.email', $data['keyword']);
+    $this->db->or_like('hak_akses.nama_akses', $data['keyword']);
+    $this->db->from('user');
+    $this->db->join('hak_akses', 'hak_akses.id_hak_akses = user.hak_akses');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 10;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(3);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+    
+    $data['pegawai']  = $this->am->getDataPegawai($config['per_page'], $start, $data['keyword']);
+    
     if (!$this->input->post('cari')) {
       $this->form_validation->set_rules('nama', 'Nama', 'required');
       $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
       $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]');
       $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
     }
-
-    $data['pegawai']  = $this->am->getDataPegawai($data['keyword']);
 
     if ($this->form_validation->run() == false) {
       $this->load->view('templates/header', $data);
@@ -153,6 +167,23 @@ class Admin extends CI_Controller
       $data['keyword'] = $this->session->userdata('keyword');
     }
 
+    $config['base_url'] = 'http://localhost/areumCafe/admin/menuCafe';
+    $this->db->like('nama', $data['keyword']);
+    $this->db->or_like('harga', $data['keyword']);
+    $this->db->or_like('jenis', $data['keyword']);
+    $this->db->or_like('stok', $data['keyword']);
+    $this->db->from('menu');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 2;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(3);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+
+    $data['menu'] = $this->am->getDataMenu($config['per_page'], $start, $data['keyword']);
+    
     if (!$this->input->post('cari')) {
       $this->form_validation->set_rules('nama', 'Nama Menu', 'required');
       $this->form_validation->set_rules('harga', 'Harga', 'required');
@@ -160,9 +191,7 @@ class Admin extends CI_Controller
       $this->form_validation->set_rules('jenis', 'Jenis Menu', 'required');
       $this->form_validation->set_rules('stok', 'Stok Menu', 'required');
     }
-
-    $data['menu'] = $this->am->getDataMenu($data['keyword']);
-
+    
     if ($this->form_validation->run() == false) {
       $this->load->view('templates/header', $data);
       $this->load->view('templates/side-navbar', $data);
@@ -250,7 +279,25 @@ class Admin extends CI_Controller
       $data['keyword'] = $this->session->userdata('keyword');
     }
 
-    $data['penjualan'] = $this->am->getPenjualan($data['keyword']);
+    $config['base_url'] = 'http://localhost/areumCafe/admin/laporanPenjualan';
+    $this->db->select('pelanggan.tanggal, menu.nama')
+    ->like('pelanggan.tanggal', $data['keyword'])
+    ->or_like('menu.nama', $data['keyword'])
+    ->from('pesanan')
+    ->join('menu', 'menu.id_menu = pesanan.id_menu')
+    ->join('pelanggan', 'pelanggan.id_pelanggan = pesanan.id_pelanggan')
+    ->group_by('pelanggan.tanggal, menu.nama')
+    ->order_by('pelanggan.tanggal', 'desc');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 10;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(3);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+
+    $data['penjualan'] = $this->am->getPenjualan($config['per_page'], $start, $data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
@@ -279,7 +326,25 @@ class Admin extends CI_Controller
       $data['keyword'] = $this->session->userdata('keyword');
     }
 
-    $data['keuangan'] = $this->am->getKeuangan($data['keyword']);
+    $config['base_url'] = 'http://localhost/areumCafe/admin/laporanKeuangan';
+    $this->db->select('pelanggan.tanggal', 'user.nama')
+    ->like('pelanggan.tanggal', $data['keyword'])
+    ->or_like('user.nama', $data['keyword'])
+    ->from('transaksi')
+    ->join('pelanggan', 'pelanggan.id_pelanggan = transaksi.id_pelanggan')
+    ->join('user', 'user.id_user = transaksi.id_pegawai')
+    ->group_by('pelanggan.tanggal, transaksi.id_pegawai')
+    ->order_by('pelanggan.tanggal', 'desc');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 2;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(3);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+
+    $data['keuangan'] = $this->am->getKeuangan($config['per_page'], $start, $data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
@@ -308,7 +373,28 @@ class Admin extends CI_Controller
       $data['keyword'] = $this->session->userdata('keyword');
     }
 
-    $data['pelanggan'] = $this->am->getPelanggan($data['keyword']);
+    $config['base_url'] = 'http://localhost/areumCafe/admin/laporanPelanggan';
+    $this->db->select('pelanggan.id_pelanggan as ip, pelanggan.tanggal, pelanggan.nama_pelanggan, user.nama, pesanan.status')
+    ->like('pelanggan.id_pelanggan', $data['keyword'])
+    ->or_like('pelanggan.tanggal', $data['keyword'])
+    ->or_like('pelanggan.nama_pelanggan', $data['keyword'])
+    ->or_like('user.nama', $data['keyword'])
+    ->or_like('pesanan.status', $data['keyword'])
+    ->from('pelanggan')
+    ->join('pesanan', 'pesanan.id_pelanggan = pelanggan.id_pelanggan')
+    ->join('user', 'user.id_user = pelanggan.id_waiter')
+    ->group_by('pelanggan.tanggal, pesanan.id_pelanggan')
+    ->order_by('pelanggan.tanggal', 'desc');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 10;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(3);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+
+    $data['pelanggan'] = $this->am->getPelanggan($config['per_page'], $start, $data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/side-navbar', $data);
@@ -361,24 +447,24 @@ class Admin extends CI_Controller
     $spreadsheet = new Spreadsheet;
 
     $spreadsheet->setActiveSheetIndex(0)
-    ->setCellValue('A1', 'Data Menu Cafe | Areum Cafe')
-    ->setCellValue('A2', 'No.')
-    ->setCellValue('B2', 'Nama Menu')
-    ->setCellValue('C2', 'Harga')
-    ->setCellValue('D2', 'Deskripsi')
-    ->setCellValue('E2', 'Jenis')
-    ->setCellValue('F2', 'Stok');
+      ->setCellValue('A1', 'Data Menu Cafe | Areum Cafe')
+      ->setCellValue('A2', 'No.')
+      ->setCellValue('B2', 'Nama Menu')
+      ->setCellValue('C2', 'Harga')
+      ->setCellValue('D2', 'Deskripsi')
+      ->setCellValue('E2', 'Jenis')
+      ->setCellValue('F2', 'Stok');
     $column = 3;
     $number = 1;
 
-    foreach($menuCafe as $mc){
+    foreach ($menuCafe as $mc) {
       $spreadsheet->setActiveSheetIndex(0)
-      ->setCellValue('A' . $column, $number)
-      ->setCellValue('B' . $column, $mc['nama'])
-      ->setCellValue('C' . $column, 'Rp' . number_format($mc['harga'], 0, ',', '.'))
-      ->setCellValue('D' . $column, $mc['deskripsi'])
-      ->setCellValue('E' . $column, $mc['jenis'])
-      ->setCellValue('F' . $column, $mc['stok']);
+        ->setCellValue('A' . $column, $number)
+        ->setCellValue('B' . $column, $mc['nama'])
+        ->setCellValue('C' . $column, 'Rp' . number_format($mc['harga'], 0, ',', '.'))
+        ->setCellValue('D' . $column, $mc['deskripsi'])
+        ->setCellValue('E' . $column, $mc['jenis'])
+        ->setCellValue('F' . $column, $mc['stok']);
       $column++;
       $number++;
     }
@@ -396,11 +482,11 @@ class Admin extends CI_Controller
     $spreadsheet = new Spreadsheet;
 
     $spreadsheet->setActiveSheetIndex(0)
-    ->setCellValue('A1', 'Laporan Penjualan | Areum Cafe')
-    ->setCellValue('A2', 'No.')
-    ->setCellValue('B2', 'Tanggal')
-    ->setCellValue('C2', 'Nama Menu')
-    ->setCellValue('D2', 'Terjual');
+      ->setCellValue('A1', 'Laporan Penjualan | Areum Cafe')
+      ->setCellValue('A2', 'No.')
+      ->setCellValue('B2', 'Tanggal')
+      ->setCellValue('C2', 'Nama Menu')
+      ->setCellValue('D2', 'Terjual');
     $column = 3;
     $number = 1;
 
@@ -427,15 +513,15 @@ class Admin extends CI_Controller
     $spreadsheet = new Spreadsheet;
 
     $spreadsheet->setActiveSheetIndex(0)
-    ->setCellValue('A1', 'Laporan Pelanggan | Areum Cafe')
-    ->setCellValue('A2', 'No.')
-    ->setCellValue('B2', 'ID Pelanggan')
-    ->setCellValue('C2', 'Tanggal')
-    ->setCellValue('D2', 'Nama Pelanggan')
-    ->setCellValue('E2', 'Jumlah Pesanan')
-    ->setCellValue('F2', 'Subtotal')
-    ->setCellValue('G2', 'Nama Pelayan')
-    ->setCellValue('H2', 'Status');
+      ->setCellValue('A1', 'Laporan Pelanggan | Areum Cafe')
+      ->setCellValue('A2', 'No.')
+      ->setCellValue('B2', 'ID Pelanggan')
+      ->setCellValue('C2', 'Tanggal')
+      ->setCellValue('D2', 'Nama Pelanggan')
+      ->setCellValue('E2', 'Jumlah Pesanan')
+      ->setCellValue('F2', 'Subtotal')
+      ->setCellValue('G2', 'Nama Pelayan')
+      ->setCellValue('H2', 'Status');
     $column = 3;
     $number = 1;
 
@@ -466,11 +552,11 @@ class Admin extends CI_Controller
     $spreadsheet = new Spreadsheet;
 
     $spreadsheet->setActiveSheetIndex(0)
-    ->setCellValue('A1', 'Laporan Pelanggan | Areum Cafe')
-    ->setCellValue('A2', 'No.')
-    ->setCellValue('B2', 'Tanggal')
-    ->setCellValue('C2', 'Nama Kasir')
-    ->setCellValue('D2', 'Pendapatan/Hari');
+      ->setCellValue('A1', 'Laporan Pelanggan | Areum Cafe')
+      ->setCellValue('A2', 'No.')
+      ->setCellValue('B2', 'Tanggal')
+      ->setCellValue('C2', 'Nama Kasir')
+      ->setCellValue('D2', 'Pendapatan/Hari');
     $column = 3;
     $number = 1;
 
@@ -494,7 +580,7 @@ class Admin extends CI_Controller
   {
     $pdf = new FPDF('l', 'mm', 'A5');
     $pdf->AddPage();
-    
+
     $pdf->SetFont('Arial', 'B', '18');
     $pdf->Cell(190, 7, 'Data Pegawai | Areum Cafe', 0, 1, 'C');
     $pdf->Cell(10, 7, '', 0, 1);
@@ -509,11 +595,11 @@ class Admin extends CI_Controller
     $keyword = $this->uri->segment(3);
     $pegawai = $this->am->getDataExportPegawai($keyword);
     $i = 1;
-    foreach($pegawai as $p){
+    foreach ($pegawai as $p) {
       $pdf->Cell(15, 6, $i++, 1, 0);
       $pdf->Cell(70, 6, $p['nama'], 1, 0);
       $pdf->Cell(70, 6, $p['email'], 1, 0);
-      $pdf->Cell(40, 6, $p['nama_akses'], 1, 1); 
+      $pdf->Cell(40, 6, $p['nama_akses'], 1, 1);
     }
 
     $pdf->Output();
@@ -541,7 +627,7 @@ class Admin extends CI_Controller
     $keyword = $this->uri->segment(3);
     $menuCafe = $this->am->getDataExportMenuCafe($keyword);
     $i = 1;
-    foreach($menuCafe as $mc){
+    foreach ($menuCafe as $mc) {
       $pdf->Cell(10, 6, $i++, 1, 0);
       $pdf->Cell(70, 6, $mc['nama'], 1, 0);
       $pdf->Cell(30, 6, 'Rp' . number_format($mc['harga'], 0, ',', '.'), 1, 0);

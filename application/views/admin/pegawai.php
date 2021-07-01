@@ -9,7 +9,7 @@
       <a href="<?= base_url('admin/printExcelPegawai/') . $this->session->userdata('keyword'); ?>" class="btn btn-success btn-excel" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export Excel</a>
     </div>
     <div class="col-md-2">
-      <a href="<?= base_url('admin/printPdfPegawai/') . $this->session->userdata('keyword');?>" class="btn btn-danger btn-pdf" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export PDF</a>
+      <a href="<?= base_url('admin/printPdfPegawai/') . $this->session->userdata('keyword'); ?>" class="btn btn-danger btn-pdf" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export PDF</a>
     </div>
     <div class="col-md-6">
       <form action="<?= base_url('admin/pegawai') ?>" method="POST">
@@ -80,13 +80,12 @@
     </thead>
     <tbody>
       <form action="<?= base_url() ?>admin/pegawai_delete" method="post">
-        <?php $i = 1 ?>
         <?php foreach ($pegawai as $p) : ?>
           <tr>
             <td>
               <input type="checkbox" name="id[]" value="<?= $p['id_user'] ?>">
             </td>
-            <th scope="row"><?= $i++ ?></th>
+            <th scope="row"><?= ++$start ?></th>
             <td><?= $p['nama'] ?></td>
             <td><?= $p['email'] ?></td>
             <td><?= $p['nama_akses'] ?></td>
@@ -97,7 +96,11 @@
         <?php endforeach; ?>
     </tbody>
   </table>
-  <button type="submit" class="btn btn-danger my-2" onclick="return confirm('Yakin ingin menghapus?')"><i class="fa fa-fw fa-minus-circle"></i> Hapus</button>
+  <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus?')"><i class="fa fa-fw fa-minus-circle"></i> Hapus</button>
+  <p class="total-rows">Total Data : <?= $total_rows ?></p>
+  <div class="pagination">
+    <?= $this->pagination->create_links(); ?>
+  </div>
   </form>
 
   <!-- modal edit pegawai -->

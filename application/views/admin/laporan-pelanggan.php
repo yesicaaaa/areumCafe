@@ -38,7 +38,7 @@
       <?php $i = 1; ?>
       <?php foreach ($pelanggan as $p) : ?>
         <tr>
-          <th scope="row"><?= $i++ ?></th>
+          <th scope="row"><?= ++$start ?></th>
           <td><?= $p['id_pelanggan'] ?></td>
           <td><?= $p['tanggal'] ?></td>
           <td><?= $p['nama_pelanggan'] ?></td>
@@ -55,4 +55,8 @@
       Tidak ada data!
     </div>
   <?php endif; ?>
+  <p class="total-rows">Total Data : <?= $total_rows ?></p>
+  <div class="pagination">
+    <?= $this->pagination->create_links(); ?>
+  </div>
 </div>

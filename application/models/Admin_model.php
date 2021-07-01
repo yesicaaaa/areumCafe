@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin_model extends CI_Model
 {
-  function getDataPegawai($keyword = null)
+  function getDataPegawai($limit, $start, $keyword = null)
   {
     $sql = "SELECT * FROM `user` as `u`
             JOIN `hak_akses` as `ha`
@@ -11,6 +11,7 @@ class Admin_model extends CI_Model
             WHERE `u`.`nama` LIKE '%$keyword%'
             OR `u`.`email` LIKE '%$keyword%'
             OR `ha`.`nama_akses` LIKE '%$keyword%'
+            LIMIT $start, $limit
           ";
 
     return $this->db->query($sql)->result_array();
@@ -55,13 +56,14 @@ class Admin_model extends CI_Model
     return $this->db->query($sql)->row_array();
   }
 
-  function getDataMenu($keyword = null)
+  function getDataMenu($limit, $start, $keyword = null)
   {
     $sql = "SELECT * FROM `menu`
             WHERE `nama` LIKE '%$keyword%'
             OR `harga` LIKE '$keyword%%'
             OR `jenis` LIKE '%$keyword%'
             OR `stok` LIKE '%$keyword%'
+            LIMIT $start, $limit
           ";
     return $this->db->query($sql)->result_array();
   }
@@ -149,7 +151,7 @@ class Admin_model extends CI_Model
     }
   }
 
-  function getPenjualan($keyword = null)
+  function getPenjualan($limit, $start, $keyword = null)
   {
     $sql = "SELECT SUM(`ps`.`qty`) AS `terjual`, `pl`.`tanggal`, `m`.`nama`  FROM `pesanan` AS `ps`
             JOIN `pelanggan` AS `pl` ON `pl`.`id_pelanggan` = `ps`.`id_pelanggan`
@@ -158,11 +160,12 @@ class Admin_model extends CI_Model
             OR `m`.`nama` LIKE '%$keyword%'
             GROUP BY `pl`.`tanggal`, `ps`.`id_menu`
             ORDER BY `pl`.`tanggal` DESC
+            LIMIT $start, $limit
           ";
     return $this->db->query($sql)->result_array();
   }
 
-  function getKeuangan($keyword = null)
+  function getKeuangan($limit, $start, $keyword = null)
   {
     $sql = "SELECT `pl`.`tanggal`, `tr`.`id_transaksi`, `u`.`nama`, SUM(`tr`.`total_harga`) AS `pendapatan` 
             FROM `transaksi` AS `tr` 
@@ -172,11 +175,12 @@ class Admin_model extends CI_Model
             OR `u`.`nama` LIKE '%$keyword%'
             GROUP BY `pl`.`tanggal`, `tr`.`id_pegawai`
             ORDER BY `pl`.`tanggal` DESC
+            LIMIT $start, $limit
           ";
     return $this->db->query($sql)->result_array();
   }
 
-  function getPelanggan($keyword = null)
+  function getPelanggan($limit, $start, $keyword = null)
   {
     $sql = "SELECT `pl`.`id_pelanggan`, `pl`.`nama_pelanggan`, SUM(`ps`.`qty`) AS `qty`, SUM(`ps`.`subtotal`) AS `subtotal`, `u`.`nama`, `ps`.`status`, `pl`.`tanggal`
             FROM `pelanggan` AS `pl`
@@ -189,6 +193,7 @@ class Admin_model extends CI_Model
             OR `ps`.`status` LIKE '%$keyword%'
             GROUP BY `pl`.`tanggal`, `pl`.`id_pelanggan`
             ORDER BY `pl`.`tanggal` DESC
+            LIMIT $start, $limit
           ";
     return $this->db->query($sql)->result_array();
   }

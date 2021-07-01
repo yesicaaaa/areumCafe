@@ -112,7 +112,7 @@
             <td>
               <input type="checkbox" name="id[]" value="<?= $m['id_menu'] ?>">
             </td>
-            <th scope="row"><?= $i++ ?></th>
+            <th scope="row"><?= ++$start ?></th>
             <td><?= $m['nama'] ?></td>
             <td><?= $m['harga'] ?></td>
             <td><?= $m['deskripsi'] ?></td>
@@ -134,6 +134,10 @@
     </div>
   <?php endif; ?>
   <button type="submit" class="btn btn-danger my-2" onclick="return confirm('Yakin ingin menghapus?')"><i class="fa fa-fw fa-minus-circle"></i> Hapus</button>
+  <p class="total-rows">Total Data : <?= $total_rows; ?></p>
+  <div class="pagination">
+    <?= $this->pagination->create_links(); ?>
+  </div>
   </form>
 
   <!-- modal edit pegawai -->

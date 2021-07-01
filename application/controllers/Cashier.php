@@ -159,8 +159,8 @@ class Cashier extends CI_Controller
       'total_pesanan' => $this->db->get_where('total_pesanan', ['id_pelanggan' => $id_pelanggan])->row_array(),
       'transaksi' => $this->cm->getDataTransaksi($id_pelanggan)
     ];
-$this->load->view('cashier/struk-pembayaran', $data);
-    // $this->pdfdom->setPaper('A4', 'potrait');
-    // $this->pdfdom->load_view('cashier/struk-pembayaran', $data);
+// $this->load->view('cashier/struk-pembayaran', $data);
+  $this->pdfdom->setPaper('A4', 'potrait');
+  $this->pdfdom->load_view('cashier/struk-pembayaran', $data);
   }
 }

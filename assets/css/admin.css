@@ -250,3 +250,18 @@ label span {
   margin-left: -42px;
   border-radius: 0;
 }
+
+.page-link {
+  color: #374939 !important;
+  border-radius: 0 !important;
+}
+
+.active .page-link {
+  background-color: #374939 !important;
+  border-color: #374939 !important;
+  color: white !important;
+}
+
+.total-rows {
+  margin: 10px 0 0 0;
+}
