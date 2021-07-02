@@ -182,3 +182,22 @@ a:hover {
 	width: 100%;
 	border-radius: 0;
 }
+
+.page-link {
+	color: #374939 !important;
+	border-radius: 0 !important;
+}
+
+.active .page-link {
+	background-color: #374939 !important;
+	border-color: #374939 !important;
+	color: white !important;
+}
+
+.total-rows {
+	margin: 10px 0 0 10px;
+}
+
+.pagination {
+	margin-left: 5px;
+}

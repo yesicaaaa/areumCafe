@@ -21,10 +21,9 @@
         </tr>
       </thead>
       <tbody>
-        <?php $i = 1 ?>
         <?php foreach ($dataPelanggan as $dp) : ?>
           <tr>
-            <th scope="row"><?= $i++ ?></th>
+            <th scope="row"><?= ++$start ?></th>
             <td><?= $dp['tanggal'] ?></td>
             <td><?= $dp['nama_pelanggan'] ?></td>
             <td><?= $dp['phone'] ?></td>
@@ -43,5 +42,9 @@
         Tidak ada transaksi
       </div>
     <?php endif; ?>
+    <p class="total-rows">Total Data : <?= $total_rows ?></p>
+    <div class="pagination">
+      <?= $this->pagination->create_links(); ?>
+    </div>
   </div>
 </div>

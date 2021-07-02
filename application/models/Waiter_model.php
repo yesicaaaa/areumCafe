@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Waiter_model extends CI_Model
 {
-  function getPesanan($id_waiter, $keyword = null)
+  function getPesanan($limit, $start, $id_waiter, $keyword = null)
   {
     $sql = "SELECT * FROM `pelanggan` AS `pl`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `pl`.`id_pelanggan`
@@ -16,12 +16,13 @@ class Waiter_model extends CI_Model
             -- OR `u`.`nama` LIKE '%$keyword%'
             AND `ps`.`status` = 'Dipesan'
             GROUP BY `pl`.`nama_pelanggan`
+            LIMIT $start, $limit
           ";
 
     return $this->db->query($sql)->result_array();
   }
 
-  function getHistoryPesanan($id_waiter, $keyword = null)
+  function getHistoryPesanan($limit, $start, $id_waiter, $keyword = null)
   {
     $sql = "SELECT * FROM `pelanggan` AS `pl`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `pl`.`id_pelanggan`
@@ -30,6 +31,7 @@ class Waiter_model extends CI_Model
             AND `pl`.`nama_pelanggan` LIKE '%$keyword%'
             AND `ps`.`status` != 'Dipesan'
             GROUP BY `pl`.`nama_pelanggan`
+            LIMIT $start, $limit
           ";
 
     return $this->db->query($sql)->result_array();

@@ -1,8 +1,9 @@
-<?php 
+<?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cashier_model extends CI_Model {
-  function getDataPelanggan($keyword = null)
+class Cashier_model extends CI_Model
+{
+  function getDataPelanggan($limit, $start, $keyword = null)
   {
     $sql = "SELECT * FROM `pelanggan` AS `p`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `p`.`id_pelanggan`
@@ -10,6 +11,7 @@ class Cashier_model extends CI_Model {
             WHERE `ps`.`status` = 'Belum Dibayar'
             AND `p`.`nama_pelanggan` LIKE '%$keyword%'
             GROUP BY `p`.`id_pelanggan`
+            LIMIT $start, $limit
           ";
 
     return $this->db->query($sql)->result_array();
@@ -38,13 +40,13 @@ class Cashier_model extends CI_Model {
     ];
     $this->db->insert('transaksi', $data);
     $status = [
-      'status'  => 'Sudah Dibayar' 
+      'status'  => 'Sudah Dibayar'
     ];
     $this->db->where('id_pelanggan', $this->input->post('id_pelanggan'));
     $this->db->update('pesanan', $status);
   }
 
-  function getAllDataPelanggan($id_cashier, $keyword = null)
+  function getAllDataPelanggan($limit, $start, $id_cashier, $keyword = null)
   {
     $sql = "SELECT * FROM `pelanggan` AS `p`
             JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `p`.`id_pelanggan`
@@ -53,9 +55,23 @@ class Cashier_model extends CI_Model {
             WHERE `t`.`id_pegawai` = $id_cashier
             AND `p`.`nama_pelanggan` LIKE '%$keyword%'
             AND `ps`.`status` = 'Sudah Dibayar'
-            GROUP BY `p`.`nama_pelanggan`
+            GROUP BY `p`.`id_pelanggan`
+            LIMIT $start, $limit
           ";
-  return $this->db->query($sql)->result_array();
+    return $this->db->query($sql)->result_array();
+  }
+
+  function getAllDataPelangganExport($id_cashier)
+  {
+    $sql = "SELECT * FROM `pelanggan` AS `p`
+            JOIN `pesanan` AS `ps` ON `ps`.`id_pelanggan` = `p`.`id_pelanggan`
+            JOIN `transaksi` AS `t` ON `t`.`id_pelanggan` = `p`.`id_pelanggan`
+            JOIN `user` AS `u` ON `u`.`id_user` = `p`.`id_waiter`
+            WHERE `t`.`id_pegawai` = $id_cashier
+            AND `ps`.`status` = 'Sudah Dibayar'
+            GROUP BY `p`.`id_pelanggan`
+          ";
+    return $this->db->query($sql)->result_array();
   }
 
   function getDataTransaksi($id_pelanggan)
@@ -67,7 +83,7 @@ class Cashier_model extends CI_Model {
     return $this->db->query($sql)->row_array();
   }
 
-  function getDataExportTransaksi($keyword = null) 
+  function getDataExportTransaksi($keyword = null)
   {
     $sql = "
           ";

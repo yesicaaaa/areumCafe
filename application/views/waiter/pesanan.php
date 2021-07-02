@@ -30,7 +30,7 @@
               <th>
                 <input type="checkbox" name="id[]" value="<?= $p['id_pelanggan'] ?>">
               </th>
-              <th scope="row"><?= $i++ ?></th>
+              <th scope="row"><?= ++$start ?></th>
               <td><?= $p['tanggal'] ?></td>
               <td><?= $p['nama_pelanggan'] ?></td>
               <td><?= $p['phone'] ?></td>
@@ -50,6 +50,10 @@
         Tidak ada pesanan!
       </div>
     <?php endif; ?>
+    <p class="total-rows">Total Data : <?= $total_rows ?></p>
+    <div class="pagination">
+      <?= $this->pagination->create_links(); ?>
+    </div>
   </div>
   <div class="col-md-4 form-pemesanan">
     <?= $this->session->flashdata('message'); ?>

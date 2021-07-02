@@ -35,7 +35,6 @@
       </tr>
     </thead>
     <tbody>
-      <?php $i = 1; ?>
       <?php foreach ($pelanggan as $p) : ?>
         <tr>
           <th scope="row"><?= ++$start ?></th>

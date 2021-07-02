@@ -106,7 +106,6 @@
     </thead>
     <tbody>
       <form action="<?= base_url() ?>admin/menu_delete" method="post">
-        <?php $i = 1 ?>
         <?php foreach ($menu as $m) : ?>
           <tr>
             <td>

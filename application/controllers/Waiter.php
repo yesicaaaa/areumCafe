@@ -8,7 +8,6 @@ class Waiter extends CI_Controller
     parent::__construct();
     $this->load->model('waiter_model', 'wm');
     is_logged_in_waiter();
-    $this->session->unset_userdata('keyword');
   }
 
   function pesanan()
@@ -27,14 +26,37 @@ class Waiter extends CI_Controller
       $data['keyword'] = $this->session->userdata('keyword');
     }
 
+    $config['base_url'] = 'http://localhost/areumCafe/waiter/pesanan';
+    $this->db->select('pelanggan.tanggal, pelanggan.nama_pelanggan, pelanggan.phone, pelanggan.no_meja, user.nama, pesanan.status')
+      ->where('pelanggan.id_waiter', $id_waiter)
+      // ->like('pelanggan.tanggal', $data['keyword'])
+      ->like('pelanggan.nama_pelanggan', $data['keyword'])
+      // ->or_like('pelanggan.phone', $data['keyword'])
+      // ->or_like('pelanggan.no_meja', $data['keyword'])
+      // ->or_like('user.nama', $data['keyword'])
+      // ->or_like('pesanan.status', $data['keyword'])
+      ->where('pesanan.status', 'Dipesan')
+      ->from('pelanggan')
+      ->join('pesanan', 'pesanan.id_pelanggan = pelanggan.id_pelanggan')
+      ->join('user', 'user.id_user = pelanggan.id_waiter')
+      ->group_by('pelanggan.nama_pelanggan');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 10;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(3);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+
+    $data['pesanan'] = $this->wm->getPesanan($config['per_page'], $start, $id_waiter, $data['keyword']);
+
     if (!$this->input->post('cari')) {
       $this->form_validation->set_rules('nama_pelanggan', 'Nama Pelanggan', 'required');
       $this->form_validation->set_rules('phone', 'No. Telepon', 'required|max_length[13]');
       $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
       $this->form_validation->set_rules('no_meja', 'No. Meja', 'required');
     }
-
-    $data['pesanan'] = $this->wm->getPesanan($id_waiter, $data['keyword']);
 
     if ($this->form_validation->run() == false) {
       $this->load->view('templates/header', $data);
@@ -62,7 +84,7 @@ class Waiter extends CI_Controller
 
   function delete_pelanggan($id)
   {
-    if($_POST['id']){
+    if ($_POST['id']) {
       $data = array();
       foreach ($_POST['id'] as $key => $val) {
         $menu = $this->db->get_where('menu',  ['id_menu' => $_POST['id'][$key]])->row_array();
@@ -117,12 +139,30 @@ class Waiter extends CI_Controller
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
       'pelanggan' => $this->wm->getDataPelanggan($id_pelanggan, $id_waiter),
       'pesanan'  => $this->wm->getPesananPelanggan($id_pelanggan),
-      'dataPesanan' => $this->wm->getPesanan($id_waiter),
       'total_pesanan' => $this->wm->getTotalPesanan($id_pelanggan),
       'title' => 'Pesanan | Areum Cafe',
       'css'   => 'waiter.css',
       'js'    => 'waiter.js'
     ];
+
+    $config['base_url'] = 'http://localhost/areumCafe/waiter/pesanan_view/' . $id_pelanggan . '/';
+    $this->db->select('pelanggan.tanggal, pelanggan.nama_pelanggan, pelanggan.phone, pelanggan.no_meja, user.nama, pesanan.status')
+      ->where('pelanggan.id_waiter', $id_waiter)
+      ->where('pesanan.status', 'Dipesan')
+      ->from('pelanggan')
+      ->join('pesanan', 'pesanan.id_pelanggan = pelanggan.id_pelanggan')
+      ->join('user', 'user.id_user = pelanggan.id_waiter')
+      ->group_by('pelanggan.nama_pelanggan');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 10;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(4);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+
+    $data['dataPesanan'] = $this->wm->getPesanan($config['per_page'], $start, $id_waiter);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/navbar-waiter', $data);
@@ -144,12 +184,30 @@ class Waiter extends CI_Controller
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
       'pelanggan' => $this->wm->getDataPelanggan($id_pelanggan, $id_waiter),
       'pesanan'  => $this->wm->getHistoryPesananPelanggan($id_pelanggan),
-      'dataPesanan' => $this->wm->getHistoryPesanan($id_waiter),
       'total_pesanan' => $this->wm->getTotalPesanan($id_pelanggan),
       'title' => 'History Pesanan | Areum Cafe',
       'css'   => 'waiter.css',
       'js'    => 'waiter.js'
     ];
+
+    $config['base_url'] = 'http://localhost/areumCafe/waiter/history_pesanan/' . $id_pelanggan . '/';
+    $this->db->select('pelanggan.tanggal, pelanggan.nama_pelanggan, pelanggan.phone, pelanggan.no_meja, user.nama, pesanan.status')
+      ->where('pelanggan.id_waiter', $id_waiter)
+      ->where('pesanan.status !=', 'Dipesan')
+      ->from('pelanggan')
+      ->join('pesanan', 'pesanan.id_pelanggan = pelanggan.id_pelanggan')
+      ->join('user', 'user.id_user = pelanggan.id_waiter')
+      ->group_by('pelanggan.nama_pelanggan');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 10;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(4);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+
+    $data['dataPesanan'] = $this->wm->getHistoryPesanan($config['per_page'], $start, $id_waiter);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/navbar-waiter', $data);
@@ -173,7 +231,25 @@ class Waiter extends CI_Controller
       $data['keyword'] = $this->session->unset_userdata('keyword');
     }
 
-    $data['dataPesanan'] = $this->wm->getHistoryPesanan($id_waiter, $data['keyword']);
+    $config['base_url'] = 'http://localhost/areumCafe/waiter/history_pesanan_all/';
+    $this->db->select('pelanggan.tanggal, pelanggan.nama_pelanggan, pelanggan.phone, pelanggan.no_meja, user.nama, pesanan.status')
+      ->where('pelanggan.id_waiter', $id_waiter)
+      ->like('pelanggan.nama_pelanggan', $data['keyword'])
+      ->where('pesanan.status !=', 'Dipesan')
+      ->from('pelanggan')
+      ->join('pesanan', 'pesanan.id_pelanggan = pelanggan.id_pelanggan')
+      ->join('user', 'user.id_user = pelanggan.id_waiter')
+      ->group_by('pelanggan.nama_pelanggan');
+    $config['total_rows'] = $this->db->count_all_results();
+    $data['total_rows'] = $config['total_rows'];
+    $config['per_page'] = 10;
+
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(3);
+    $start = ($data['start'] > 0) ? $data['start'] : 0;
+
+    $data['dataPesanan'] = $this->wm->getHistoryPesanan($config['per_page'], $start, $id_waiter, $data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/navbar-waiter', $data);
