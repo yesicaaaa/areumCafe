@@ -21,6 +21,6 @@
       <?= form_error('password', '<div class="invalid-feedback">', '</div>'); ?>
     </div>
     <button class="btn btn-masuk">Masuk</button>
-    <p>Belum punya akun? <span><a href="<?= base_url(); ?>main/signUp">Daftar</a></span></p>
+    <!-- <p>Belum punya akun? <span><a href="<?= base_url(); ?>main/signUp">Daftar</a></span></p> -->
   </form>
 </div>

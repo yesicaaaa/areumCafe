@@ -36,7 +36,7 @@
             <td><?= $dp['nama'] ?></td>
             <td><?= $dp['status'] ?></td>
             <td>
-              <a href="<?= base_url('cashier/proses_transaksi/') . $dp['id_pelanggan'] ?>" class="badge bg-danger">Bayar</a>
+              <a href="<?= base_url('cashier/proses_transaksi/') . $dp['id_pelanggan'] ?>" class="badge bg-success">Bayar</a>
             </td>
           </tr>
         <?php endforeach; ?>

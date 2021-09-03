@@ -72,12 +72,13 @@ class Admin extends CI_Controller
 
     $data['start'] = $this->uri->segment(3);
     $start = ($data['start'] > 0) ? $data['start'] : 0;
-    
+
     $data['pegawai']  = $this->am->getDataPegawai($config['per_page'], $start, $data['keyword']);
-    
+
     if (!$this->input->post('cari')) {
       $this->form_validation->set_rules('nama', 'Nama', 'required');
       $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
+      $this->form_validation->set_rules('hak_akses', 'Hak Akses', 'required');
       $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]');
       $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
     }
@@ -175,7 +176,7 @@ class Admin extends CI_Controller
     $this->db->from('menu');
     $config['total_rows'] = $this->db->count_all_results();
     $data['total_rows'] = $config['total_rows'];
-    $config['per_page'] = 2;
+    $config['per_page'] = 10;
 
     $this->pagination->initialize($config);
 
@@ -183,7 +184,7 @@ class Admin extends CI_Controller
     $start = ($data['start'] > 0) ? $data['start'] : 0;
 
     $data['menu'] = $this->am->getDataMenu($config['per_page'], $start, $data['keyword']);
-    
+
     if (!$this->input->post('cari')) {
       $this->form_validation->set_rules('nama', 'Nama Menu', 'required');
       $this->form_validation->set_rules('harga', 'Harga', 'required');
@@ -191,7 +192,7 @@ class Admin extends CI_Controller
       $this->form_validation->set_rules('jenis', 'Jenis Menu', 'required');
       $this->form_validation->set_rules('stok', 'Stok Menu', 'required');
     }
-    
+
     if ($this->form_validation->run() == false) {
       $this->load->view('templates/header', $data);
       $this->load->view('templates/side-navbar', $data);
@@ -281,13 +282,13 @@ class Admin extends CI_Controller
 
     $config['base_url'] = 'http://localhost/areumCafe/admin/laporanPenjualan';
     $this->db->select('pelanggan.tanggal, menu.nama')
-    ->like('pelanggan.tanggal', $data['keyword'])
-    ->or_like('menu.nama', $data['keyword'])
-    ->from('pesanan')
-    ->join('menu', 'menu.id_menu = pesanan.id_menu')
-    ->join('pelanggan', 'pelanggan.id_pelanggan = pesanan.id_pelanggan')
-    ->group_by('pelanggan.tanggal, menu.nama')
-    ->order_by('pelanggan.tanggal', 'desc');
+      ->like('pelanggan.tanggal', $data['keyword'])
+      ->or_like('menu.nama', $data['keyword'])
+      ->from('pesanan')
+      ->join('menu', 'menu.id_menu = pesanan.id_menu')
+      ->join('pelanggan', 'pelanggan.id_pelanggan = pesanan.id_pelanggan')
+      ->group_by('pelanggan.tanggal, menu.nama')
+      ->order_by('pelanggan.tanggal', 'desc');
     $config['total_rows'] = $this->db->count_all_results();
     $data['total_rows'] = $config['total_rows'];
     $config['per_page'] = 10;
@@ -328,13 +329,13 @@ class Admin extends CI_Controller
 
     $config['base_url'] = 'http://localhost/areumCafe/admin/laporanKeuangan';
     $this->db->select('pelanggan.tanggal', 'user.nama')
-    ->like('pelanggan.tanggal', $data['keyword'])
-    ->or_like('user.nama', $data['keyword'])
-    ->from('transaksi')
-    ->join('pelanggan', 'pelanggan.id_pelanggan = transaksi.id_pelanggan')
-    ->join('user', 'user.id_user = transaksi.id_pegawai')
-    ->group_by('pelanggan.tanggal, transaksi.id_pegawai')
-    ->order_by('pelanggan.tanggal', 'desc');
+      ->like('pelanggan.tanggal', $data['keyword'])
+      ->or_like('user.nama', $data['keyword'])
+      ->from('transaksi')
+      ->join('pelanggan', 'pelanggan.id_pelanggan = transaksi.id_pelanggan')
+      ->join('user', 'user.id_user = transaksi.id_pegawai')
+      ->group_by('pelanggan.tanggal, transaksi.id_pegawai')
+      ->order_by('pelanggan.tanggal', 'desc');
     $config['total_rows'] = $this->db->count_all_results();
     $data['total_rows'] = $config['total_rows'];
     $config['per_page'] = 2;
@@ -375,16 +376,16 @@ class Admin extends CI_Controller
 
     $config['base_url'] = 'http://localhost/areumCafe/admin/laporanPelanggan';
     $this->db->select('pelanggan.id_pelanggan as ip, pelanggan.tanggal, pelanggan.nama_pelanggan, user.nama, pesanan.status')
-    ->like('pelanggan.id_pelanggan', $data['keyword'])
-    ->or_like('pelanggan.tanggal', $data['keyword'])
-    ->or_like('pelanggan.nama_pelanggan', $data['keyword'])
-    ->or_like('user.nama', $data['keyword'])
-    ->or_like('pesanan.status', $data['keyword'])
-    ->from('pelanggan')
-    ->join('pesanan', 'pesanan.id_pelanggan = pelanggan.id_pelanggan')
-    ->join('user', 'user.id_user = pelanggan.id_waiter')
-    ->group_by('pelanggan.tanggal, pesanan.id_pelanggan')
-    ->order_by('pelanggan.tanggal', 'desc');
+      ->like('pelanggan.id_pelanggan', $data['keyword'])
+      ->or_like('pelanggan.tanggal', $data['keyword'])
+      ->or_like('pelanggan.nama_pelanggan', $data['keyword'])
+      ->or_like('user.nama', $data['keyword'])
+      ->or_like('pesanan.status', $data['keyword'])
+      ->from('pelanggan')
+      ->join('pesanan', 'pesanan.id_pelanggan = pelanggan.id_pelanggan')
+      ->join('user', 'user.id_user = pelanggan.id_waiter')
+      ->group_by('pelanggan.tanggal, pesanan.id_pelanggan')
+      ->order_by('pelanggan.tanggal', 'desc');
     $config['total_rows'] = $this->db->count_all_results();
     $data['total_rows'] = $config['total_rows'];
     $config['per_page'] = 10;

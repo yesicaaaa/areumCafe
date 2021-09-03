@@ -265,3 +265,10 @@ label span {
 .total-rows {
   margin: 10px 0 0 0;
 }
+
+.input-role {
+  height: 30px;
+  font-size: 13px;
+  width: 78%;
+  margin-left: 12px;
+}

@@ -23,7 +23,7 @@ class Admin_model extends CI_Model
       'nama'  => htmlspecialchars($this->input->post('nama')),
       'email' => htmlspecialchars($this->input->post('email')),
       'password'  => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-      'hak_akses' => 3,
+      'hak_akses' => htmlspecialchars($this->input->post('hak_akses')),
       'date_created'  => date('Y-m-d')
     ];
     $this->db->insert('user', $data);

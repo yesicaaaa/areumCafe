@@ -81,7 +81,7 @@ class Cashier extends CI_Controller
       ->group_by('pelanggan.id_pelanggan');
     $config['total_rows'] = $this->db->count_all_results();
     $data['total_rows'] = $config['total_rows'];
-    $config['per_page'] = 2;
+    $config['per_page'] = 10;
 
     $this->pagination->initialize($config);
 

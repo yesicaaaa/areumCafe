@@ -46,6 +46,13 @@
               <?= form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
             </div>
           </div>
+          <div class="mb-3 row">
+            <label for="inputRole" class="col-sm-2 col-form-label">Hak Akses<span>*</span></label>
+            <select class="form-select input-role" id="inputRole" name="hak_akses">
+              <option value="2">Cashier</option>
+              <option value="3">Waiter</option>
+            </select>
+          </div>
         </div>
         <div class="col-md-5 col-tambah2">
           <div class="mb-3 row">
