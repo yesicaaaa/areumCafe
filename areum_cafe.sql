@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2021 at 04:02 AM
+-- Generation Time: Sep 07, 2021 at 11:06 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.14
 
@@ -20,6 +20,42 @@ SET time_zone = "+00:00";
 --
 -- Database: `areum_cafe`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addPegawai` (IN `id_user` INT, IN `nama` VARCHAR(128), IN `email` VARCHAR(128), IN `password` VARCHAR(255), IN `hak_akses` INT, IN `date_created` DATE)  NO SQL
+BEGIN
+	INSERT INTO user
+    VALUES (id_user, nama, email, password, hak_akses, date_created);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletePegawai` (IN `id` INT)  NO SQL
+BEGIN
+	DELETE FROM user
+    WHERE id_user = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `editPegawai` (IN `editId_user` INT, IN `editNama` VARCHAR(128), IN `editHak_akses` INT)  NO SQL
+BEGIN
+	UPDATE user
+    SET nama = editNama,
+    hak_akses = editHak_akses
+    WHERE id_user = editId_user;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `showPegawai` (IN `batas` INT, IN `mulai` INT, IN `keyword` VARCHAR(128))  NO SQL
+BEGIN
+	SELECT * FROM user
+    JOIN hak_akses on hak_akses.id_hak_akses = user.hak_akses
+    WHERE user.nama LIKE keyword
+    OR user.email LIKE keyword
+    OR hak_akses.nama_akses LIKE keyword
+    LIMIT mulai, batas;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -300,7 +336,7 @@ INSERT INTO `user` (`id_user`, `nama`, `email`, `password`, `hak_akses`, `date_c
 (1, 'Yesica Anggraeni', 'yesica@gmail.com', '$2y$10$PTlG0JDrQAqIaxAfTe6lceSDnkpl/EdfCL09JdMtWVCU3oS9/v/9S', 1, '2021-06-18'),
 (2, 'Pebi Riyani', 'pebi@gmail.com', '$2y$10$UiE4AyszD5JzRApTFjL/5uaHqKARFdVGv8RzGf3stwZ9p/4cmjvta', 2, '2021-06-18'),
 (3, 'Ajeng Maelani', 'ajeng@gmail.com', '$2y$10$Vqw9Ls17OhZS/Gyju7e3iuWFSCWI4ah2jzmqjTgKZT6OKXCz2K31.', 3, '2021-06-18'),
-(4, 'Nadia Damayanti', 'nadia@gmail.com', '$2y$10$gZNH7lezUm3NVnJ6f7mAw.Fj/efg7/QRoX2aFR7JZ2VDbxjItZeKa', 3, '2021-06-21'),
+(4, 'Nadia Damayanti', 'nadia@gmail.com', '$2y$10$gZNH7lezUm3NVnJ6f7mAw.Fj/efg7/QRoX2aFR7JZ2VDbxjItZeKa', 2, '2021-06-21'),
 (7, 'Alma Damayanti', 'almaa@gmail.com', '$2y$10$o/5XHm9jGrbGGUZmXyxFbevqUdch726PecLO1SEQaeafrpsdvAghK', 3, '2021-06-21'),
 (8, 'Raya Fitriani', 'raya@gmail.com', '$2y$10$Nf5gR7mbotNE/F5Z3a97/OVMH14Zy2YsPcjub/FjJTPHotjhoUoPu', 2, '2021-06-21'),
 (9, 'Willyan Wilrandi', 'willyan@gmail.com', '$2y$10$ZW0YwCiKL0jwNhZxyC8rV.Unm.XwcEW.0.yPlNK/Ep2i6dTlmOWeq', 2, '2021-09-01');
@@ -389,7 +425,7 @@ ALTER TABLE `total_pesanan`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

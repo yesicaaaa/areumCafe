@@ -5,47 +5,43 @@ class Admin_model extends CI_Model
 {
   function getDataPegawai($limit, $start, $keyword = null)
   {
-    $sql = "SELECT * FROM `user` as `u`
-            JOIN `hak_akses` as `ha`
-            ON `ha`.`id_hak_akses` = `u`.`hak_akses`
-            WHERE `u`.`nama` LIKE '%$keyword%'
-            OR `u`.`email` LIKE '%$keyword%'
-            OR `ha`.`nama_akses` LIKE '%$keyword%'
-            LIMIT $start, $limit
-          ";
+    $showPegawaiSP = 'CALL showPegawai(?, ?, ?)';
+    $data = [
+      'limit' => $limit,
+      'start' => $start,
+      'keyword' => '%' . $keyword . '%'
+    ];
 
-    return $this->db->query($sql)->result_array();
+    return $this->db->query($showPegawaiSP, $data)->result_array();
   }
 
   function add_pegawai()
   {
+    $insertPegawaiSP = 'CALL addPegawai(?, ?, ?, ?, ?, ?)';
     $data = [
+      'id_user' => '',
       'nama'  => htmlspecialchars($this->input->post('nama')),
       'email' => htmlspecialchars($this->input->post('email')),
       'password'  => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
       'hak_akses' => htmlspecialchars($this->input->post('hak_akses')),
       'date_created'  => date('Y-m-d')
     ];
-    $this->db->insert('user', $data);
+    $this->db->query($insertPegawaiSP, $data);
   }
 
   function pegawai_delete($id)
   {
-    return $this->db->delete('user', ['id_user' => $id]);
+    $deletePegawaiSP = 'CALL deletePegawai(?)';
+    $this->db->query($deletePegawaiSP, $id);
+
+    if($this->db->affected_rows() > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  function editPegawai()
-  {
-    $data = [
-      'nama'  => htmlspecialchars($this->input->post('nama')),
-      'hak_akses' => htmlspecialchars($this->input->post('hak_akses'))
-    ];
-
-    $this->db->where('id_user', $this->input->post('id_user'));
-    $this->db->update('user', $data);
-  }
-
-  function getPegawaiRow($id_user)
+  function getUserRow($id_user)
   {
     $sql = "SELECT * from `user` as `u`
             JOIN `hak_akses` as `ha`
@@ -53,7 +49,25 @@ class Admin_model extends CI_Model
             WHERE `u`.`id_user` = $id_user
             ";
 
-    return $this->db->query($sql)->row_array();
+    $res = $this->db->query($sql);
+
+    if($res->num_rows() > 0) {
+      return $res->row();
+    } else {
+      return false;
+    }
+  }
+
+  function editPegawai()
+  {
+    $editPegawaiSP = 'CALL editPegawai(?, ?, ?)';
+    $data = [
+      'id_user' => $this->input->post('id_user'),
+      'nama'  => htmlspecialchars($this->input->post('nama')),
+      'hak_akses' => htmlspecialchars($this->input->post('hak_akses'))
+    ];
+
+    $this->db->query($editPegawaiSP, $data);
   }
 
   function getDataMenu($limit, $start, $keyword = null)
@@ -300,5 +314,61 @@ class Admin_model extends CI_Model
             ORDER BY `pl`.`tanggal` DESC
           ";
     return $this->db->query($sql)->result_array();
+  }
+
+  function cekEmail($email)
+  {
+    $sql = "SELECT count(*) as jml 
+            FROM `user` 
+            WHERE `user`.`email` = '{$email}'";
+    
+    return $this->db->query($sql)->row()->jml;
+  }
+
+  function tambahDataPegawai()
+  {
+    date_default_timezone_set('Asia/Jakarta');
+    $this->db->trans_begin();
+
+    $dataPegawai = [
+      'nama'  => $this->input->post('nama'),
+      'email'  => $this->input->post('email'),
+      'password'  => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+      'hak_akses' => $this->input->post('hak_akses'),
+      'date_created'  => date('Y-m-d')
+    ];
+
+    $this->db->insert('user', $dataPegawai);
+
+    $last_id = $this->db->insert_id();
+
+    if($this->input->post('detailPegawai') != null) {
+      $detailPeg = $this->input->post('detailPegawai');
+      $jml_data = count($detailPeg);
+    } else {
+      $jml_data = 0;
+    }
+
+    for($i = 0; $i < $jml_data; $i++) {
+      $detailPegawai = [
+        'id_user' => $last_id,
+        'nama_saudara'  => $detailPeg[$i]['nama_saudara'],
+        'deskripsi' => $detailPeg[$i]['deskripsi'],
+        'date_created'  => date('Y-m-d')
+      ];
+      $this->db->insert('user_detail', $detailPegawai);
+    }
+
+    $this->db->trans_complete();
+
+    if($this->db->trans_status() === false) {
+      $this->db->trans_rollback();
+      $last_id = 0;
+    }else{
+      $this->db->trans_commit();
+    }
+
+    $ret['user_id'] = $last_id;
+    return $ret;
   }
 }

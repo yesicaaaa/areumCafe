@@ -19,6 +19,10 @@
     </ul>
     <div class="divider"></div>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="<?= base_url('admin/tambahPegawai'); ?>"><i class="fa fa-fw fa-plus"></i><span>Tambah  Pegawai</span></a></li>
+    </ul>
+    <div class="divider"></div>
+    <ul class="nav nav-pills nav-stacked">
       <li><a href="<?= base_url('admin/menuCafe'); ?>"><i class="fa fa-fw fa-coffee"></i><span>Menu Cafe</span></a></li>
     </ul>
     <div class="divider"></div>

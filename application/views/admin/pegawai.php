@@ -4,80 +4,27 @@
       <li class="breadcrumb-item active" aria-current="page">Data Pegawai</li>
     </ol>
   </nav>
-  <div class="row">
+  <div class="row btn-group-pegawai">
+    <div class="col-md-2">
+      <button type="button" class="btn btn-danger delete-pegawai"><i class="fa fa-fw fa-minus-circle"></i> Hapus</button>
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-edit edit-pegawai"><i class="fa fa-fw fa-edit"></i> Edit</button>
+    </div>
     <div class="col-md-2">
       <a href="<?= base_url('admin/printExcelPegawai/') . $this->session->userdata('keyword'); ?>" class="btn btn-success btn-excel" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export Excel</a>
     </div>
     <div class="col-md-2">
       <a href="<?= base_url('admin/printPdfPegawai/') . $this->session->userdata('keyword'); ?>" class="btn btn-danger btn-pdf" onclick="return confirm('Yakin ingin mengexport data ini?')"><i class="fa fa-fw fa-download"></i> Export PDF</a>
     </div>
-    <div class="col-md-6">
-      <form action="<?= base_url('admin/pegawai') ?>" method="POST">
-        <div class="input-group mb-3 input-cari">
-          <input type="text" class="form-control" placeholder="Cari...." name="keyword" autocomplete="off">
-          <input class="btn btn-cari" type="submit" name="cari"></input>
-          <a href="<?= base_url('admin/refreshPegawai') ?>" class="refresh"><i class="fa fa-refresh"></i></a>
-        </div>
-      </form>
-    </div>
   </div>
   <?= $this->session->flashdata('message'); ?>
-  <div class="form-tambah">
-    <h6>
-      Tambah Pegawai
-      <span>
-        <button class="badge bg-success" id="pegawai-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#tambahPegawaiCollapse" aria-expanded="false" aria-controls="tambahPegawaiCollapse">+</button>
-      </span>
-    </h6>
-    <form action="<?= base_url('admin/pegawai') ?>" method="post" class="form-pegawai " id="tambahPegawaiCollapse">
-      <div class="row" id="formAdd">
-        <div class="col-md-5">
-          <div class="mb-3 row">
-            <label for="inputNama" class="col-sm-2 col-form-label">Nama Lengkap<span>*</span></label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" name="nama" id="inputNama" autocomplete="off" value="<?= set_value('nama') ?>">
-              <?= form_error('nama', '<div class="invalid-feedback">', '</div>'); ?>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputEmail" class="col-sm-2 col-form-label">Email<span>*</span></label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control" name="email" id="inputEmail" autocomplete="off" value="<?= set_value('email') ?>">
-              <?= form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputRole" class="col-sm-2 col-form-label">Hak Akses<span>*</span></label>
-            <select class="form-select input-role" id="inputRole" name="hak_akses">
-              <option value="2">Cashier</option>
-              <option value="3">Waiter</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-5 col-tambah2">
-          <div class="mb-3 row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">Password<span>*</span></label>
-            <div class="col-sm-10">
-              <input type="password" class="form-control" name="password" id="inputPassword" required>
-              <?= form_error('password', '<div class="invalid-feedback">', '</div>'); ?>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputConfirmPassword" class="col-sm-2 col-form-label">Konfirmasi Password<span>*</span></label>
-            <div class="col-sm-10">
-              <input type="password" class="form-control" name="confirm_password" id="inputConfirmPassword" required>
-              <?= form_error('confirm_password', '<div class="invalid-feedback">', '</div>'); ?>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button type="submit" id="validasi" class="btn btn-primary" onclick="return confirm('Yakin ingin menambahkan data?')">Tambah</button>
-    </form>
-  </div>
-  <table class="table">
+  <table class="table pegawai">
     <thead class="table-color">
       <tr>
-        <th scope="col"></th>
+        <th scope="col">
+          <input type="checkbox" id="checkall">
+        </th>
         <th scope="col">#</th>
         <th scope="col">Nama Lengkap</th>
         <th scope="col">Email</th>
@@ -86,29 +33,26 @@
       </tr>
     </thead>
     <tbody>
-      <form action="<?= base_url() ?>admin/pegawai_delete" method="post">
-        <?php foreach ($pegawai as $p) : ?>
-          <tr>
-            <td>
-              <input type="checkbox" name="id[]" value="<?= $p['id_user'] ?>">
-            </td>
-            <th scope="row"><?= ++$start ?></th>
-            <td><?= $p['nama'] ?></td>
-            <td><?= $p['email'] ?></td>
-            <td><?= $p['nama_akses'] ?></td>
-            <td>
-              <a href="javascript:getData(<?= $p['id_user'] ?>);" class="badge bg-success">Edit</a>
-            </td>
-          </tr>
-        <?php endforeach; ?>
+      <?php foreach ($pegawai as $p) : ?>
+        <tr>
+          <td class="idUser">
+            <input type="checkbox" class="id-checkbox checkpart" name="id" data-idUser="<?= $p['id_user'] ?>">
+          </td>
+          <th scope="row"><?= ++$start ?></th>
+          <td><?= $p['nama'] ?></td>
+          <td><?= $p['email'] ?></td>
+          <td><?= $p['nama_akses'] ?></td>
+          <td>
+            <a href="javascript:getData(<?= $p['id_user'] ?>);" class="badge bg-success bg-edit-pegawai">Edit</a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
-  <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus?')"><i class="fa fa-fw fa-minus-circle"></i> Hapus</button>
   <p class="total-rows">Total Data : <?= $total_rows ?></p>
   <div class="pagination">
     <?= $this->pagination->create_links(); ?>
   </div>
-  </form>
 
   <!-- modal edit pegawai -->
   <div class="modal" id="editPegawai" tabindex="-1">
@@ -150,24 +94,24 @@
   </div>
 </div>
 
+<div class="modal" id="modalDeletePegawai" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Apakah kamu yakin ingin menghapus data pegawai?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-batal-hapus" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-hapus-pegawai">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   var base_url = '<?= base_url(); ?>';
-
-  function getData(id_user) {
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: base_url + 'admin/getPegawaiRow',
-      data: {
-        id_user: id_user
-      },
-      success: function(data) {
-        $('#id_userEdit').val(data.id_user),
-          $('#namaEdit').val(data.nama),
-          $('#emailEdit').val(data.email),
-          $('#aksesEdit').val(data.hak_akses),
-          $('#editPegawai').modal('show')
-      }
-    });
-  }
 </script>
