@@ -1,21 +1,21 @@
 $(document).ready(function() {
-    $('.add-more').on('click', function() {
-      var html = $('.copy-inputan').html();
-      $('.after-add-more').after(html);
-    });
+  $('.add-more').on('click', function() {
+    var html = $('.copy-inputan').html();
+    $('.after-add-more').after(html);
+  });
 
-    $('body').on('click', '.remove', function() {
-      $(this).parents(".control-group").remove();
-    });
+  $('body').on('click', '.remove', function() {
+    $(this).parents(".control-group").remove();
+  });
 
-    $('#btn_simpan_pegawai').click(function() {
-      onSavePegawai();
-    });
+  $('#btn_simpan_pegawai').click(function() {
+    onSavePegawai();
+  });
 
-    $('#form-add').validate({
-      rules: {
-        nama: {
-          maxlength: 100
+  $('#form-add').validate({
+    rules: {
+      nama: {
+        maxlength: 100
         },
         email: {
           email: true,
@@ -23,6 +23,9 @@ $(document).ready(function() {
         },
         hak_akses: {
           maxlength: 1
+        },
+        deskripsi_user: {
+          maxlength: 100
         },
         password: {
           minlength: 6,
@@ -43,6 +46,9 @@ $(document).ready(function() {
         hak_akses: {
           maxlength: "Panjang maksimal inputan sampai 1 karakter"
         },
+        deskripsi_user: {
+          maxlength: "Panjang maksimal inputan sampai 100 karakter"
+        },
         password: {
           minlength: "Panjang minimal inputan 6 karakter"
         },
@@ -51,10 +57,6 @@ $(document).ready(function() {
           equalTo: 'Password tidak sama'
         } 
       },
-      errorElement: 'div',
-      errorClass: 'help-block',
-      focusInvalid: false,
-      ignore: '',
       highlight: function(e) {
         $(e).closest('.form-group').addClass('has-error');
       },
@@ -65,21 +67,19 @@ $(document).ready(function() {
       errorPlacement: function(error, element){
         error.insertAfter(element);
       }
-    });
+    })  ;
   });
 
   function onSavePegawai() {
     if($('#form-add').valid()) {
       var base_url = 'http://localhost/areumCafe/';
       var arr = [];
-      var i = 0;
       $('.nama-saudara').each(function(index, element) {
         if ($(element).val() != '') {
           arr.push({
             nama_saudara: $(element).val(),
             deskripsi: $(element).parents('.row').find('.deskripsi').val()
           });
-          i++;
         }
       });
       $.ajax({
@@ -90,6 +90,7 @@ $(document).ready(function() {
           nama: $('#inputNama').val(),
           email: $('#inputEmail').val(),
           hak_akses: $('#inputRole').val(),
+          deskripsi_user: $('#inputDeskripsiUser').val(),
           password: $('#inputPassword').val(),
           confirm_password: $('#inputConfirmPassword').val(),
           detailPegawai: arr

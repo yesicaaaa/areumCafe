@@ -3,16 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin_model extends CI_Model
 {
-  function getDataPegawai($limit, $start, $keyword = null)
+  function getDataPegawai()
   {
-    $showPegawaiSP = 'CALL showPegawai(?, ?, ?)';
-    $data = [
-      'limit' => $limit,
-      'start' => $start,
-      'keyword' => '%' . $keyword . '%'
-    ];
+    $showPegawaiSP = 'CALL showPegawai()';
 
-    return $this->db->query($showPegawaiSP, $data)->result_array();
+    return $this->db->query($showPegawaiSP)->result_array();
   }
 
   function add_pegawai()
@@ -31,8 +26,10 @@ class Admin_model extends CI_Model
 
   function pegawai_delete($id)
   {
-    $deletePegawaiSP = 'CALL deletePegawai(?)';
-    $this->db->query($deletePegawaiSP, $id);
+    // $deletePegawaiSP = 'CALL deletePegawai(?)';
+    // $this->db->query($deletePegawaiSP, $id);
+    $this->db->where_in('id_user', $id);
+    $this->db->delete('user');
 
     if($this->db->affected_rows() > 0) {
       return true;
@@ -333,8 +330,9 @@ class Admin_model extends CI_Model
     $dataPegawai = [
       'nama'  => $this->input->post('nama'),
       'email'  => $this->input->post('email'),
-      'password'  => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
       'hak_akses' => $this->input->post('hak_akses'),
+      'deskripsi' => $this->input->post('deskripsi_user'),
+      'password'  => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
       'date_created'  => date('Y-m-d')
     ];
 
@@ -369,6 +367,72 @@ class Admin_model extends CI_Model
     }
 
     $ret['user_id'] = $last_id;
+    return $ret;
+  }
+
+  function cekIdDetailUser($id)
+  {
+    $sql = "SELECT count(*) 
+            FROM `user_detail` 
+            WHERE `id` = $id";
+    return $this->db->query($sql)->num_rows();
+  }
+
+  function editDataPegawai()
+  {
+    date_default_timezone_set('Asia/Jakarta');
+
+    $this->db->trans_begin();
+
+    $dataPegawai = [
+      'nama'  => $this->input->post('nama'),
+      'hak_akses' => $this->input->post('hak_akses'),
+      'deskripsi' => $this->input->post('deskripsi_user'),
+      'date_updated'  => date('Y-m-d G:i:s')
+    ];
+
+    $this->db->where('id_user', $this->input->post('id_user'));
+    $this->db->update('user', $dataPegawai);
+
+    if($this->input->post('detailPegawai') != null) {
+      $detailPeg = $this->input->post('detailPegawai');
+      $jml_data = count($detailPeg);
+    } else {
+      $jml_data = 0;
+    }
+
+    for($i = 0; $i < $jml_data; $i++) {
+      if($detailPeg[$i]['id_user_detail'] != null) {
+        $detailPegawai = [
+          'id_user'       => $this->input->post('id_user'),
+          'nama_saudara'  => $detailPeg[$i]['nama_saudara'],
+          'deskripsi'     => $detailPeg[$i]['deskripsi'],
+          'date_updated'  => date('Y-m-d G:i:s')
+        ];  
+
+        $this->db->where('id', $detailPeg[$i]['id_user_detail']);
+        $this->db->update('user_detail', $detailPegawai);
+      } else {
+        $detailPegawai = [
+          'id_user'       => $this->input->post('id_user'),
+          'nama_saudara'  => $detailPeg[$i]['nama_saudara'],
+          'deskripsi'     => $detailPeg[$i]['deskripsi'],
+          'date_created'  => date('Y-m-d G:i:s')
+        ];
+
+        $this->db->insert('user_detail', $detailPegawai);
+      }
+    }
+
+    if($this->db->trans_status() === false) {
+      $this->db->trans_rollback();
+      $status = 0;
+    } else {
+      $this->db->trans_commit();
+      $status = 1;
+    }
+
+    $ret['status'] = $status;
     return $ret;
   }
 }

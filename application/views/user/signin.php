@@ -5,9 +5,9 @@
     <div class="input-group mb-3">
       <span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span>
       <?php if (form_error('email')) : ?>
-        <input type="email" class="form-control is-invalid" name="email" id="email" placeholder="Email" value="<?= set_value('email') ?>" autocomplete="off">
+        <input type="email" class="form-control is-invalid" name="email" id="email" placeholder="Email" value="<?= set_value('email') ?>">
       <?php else : ?>
-        <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="<?= set_value('email') ?>" autocomplete="off">
+        <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="<?= set_value('email') ?>">
       <?php endif; ?>
       <?= form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
     </div>

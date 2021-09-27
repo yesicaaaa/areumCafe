@@ -25,11 +25,10 @@
         <th scope="col">
           <input type="checkbox" id="checkall">
         </th>
-        <th scope="col">#</th>
         <th scope="col">Nama Lengkap</th>
         <th scope="col">Email</th>
         <th scope="col">Hak Akses</th>
-        <th scope="col">Aksi</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -38,21 +37,16 @@
           <td class="idUser">
             <input type="checkbox" class="id-checkbox checkpart" name="id" data-idUser="<?= $p['id_user'] ?>">
           </td>
-          <th scope="row"><?= ++$start ?></th>
           <td><?= $p['nama'] ?></td>
           <td><?= $p['email'] ?></td>
           <td><?= $p['nama_akses'] ?></td>
           <td>
-            <a href="javascript:getData(<?= $p['id_user'] ?>);" class="badge bg-success bg-edit-pegawai">Edit</a>
+            <a href="javascript:getData(<?= $p['id_user'] ?>);" class="badge bg-success bg-edit-pegawai">Detail</a>
           </td>
         </tr>
       <?php endforeach; ?>
     </tbody>
   </table>
-  <p class="total-rows">Total Data : <?= $total_rows ?></p>
-  <div class="pagination">
-    <?= $this->pagination->create_links(); ?>
-  </div>
 
   <!-- modal edit pegawai -->
   <div class="modal" id="editPegawai" tabindex="-1">

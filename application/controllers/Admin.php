@@ -46,34 +46,11 @@ class Admin extends CI_Controller
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
       'hak_akses' => $this->db->get('hak_akses')->result_array(),
+      'pegawai' => $this->am->getDataPegawai(),
       'title' => 'Pegawai | Areum Cafe',
       'css'   => 'admin.css',
       'js'    => 'pegawai.js'
     ];
-
-    if ($this->input->post('cari')) {
-      $data['keyword'] = $this->input->post('keyword');
-      $this->session->set_userdata('keyword', $data['keyword']);
-    } else {
-      $data['keyword'] = $this->session->userdata('keyword');
-    }
-
-    $config['base_url'] = 'http://localhost/areumCafe/admin/pegawai';
-    $this->db->like('user.nama', $data['keyword']);
-    $this->db->or_like('user.email', $data['keyword']);
-    $this->db->or_like('hak_akses.nama_akses', $data['keyword']);
-    $this->db->from('user');
-    $this->db->join('hak_akses', 'hak_akses.id_hak_akses = user.hak_akses');
-    $config['total_rows'] = $this->db->count_all_results();
-    $data['total_rows'] = $config['total_rows'];
-    $config['per_page'] = 10;
-
-    $this->pagination->initialize($config);
-
-    $data['start'] = $this->uri->segment(3);
-    $start = ($data['start'] > 0) ? $data['start'] : 0;
-
-    $data['pegawai']  = $this->am->getDataPegawai($config['per_page'], $start, $data['keyword']);
 
     if (!$this->input->post('cari')) {
       $this->form_validation->set_rules('nama', 'Nama', 'required');
@@ -151,6 +128,7 @@ class Admin extends CI_Controller
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
       'row' => $this->am->getUserRow($id_user),
+      'siblings'  => $this->db->get_where('user_detail', ['id_user' => $id_user])->result_array(),
       'title' => 'Edit Pegawai | Areum Cafe',
       'css'   => 'admin.css',
       'js'    => 'editPegawai.js'
@@ -776,6 +754,23 @@ class Admin extends CI_Controller
       } else {
         $result = false;
       }
+    }
+
+    $data = array();
+    $data['res_status'] = $result;
+    $data['res_message'] = $message;
+
+    echo json_encode($data);
+  }
+
+  function editDataPegawai()
+  {
+    $user = $this->am->editDataPegawai();
+    if($user['status'] == 1) {
+      $result = true;
+      $message = 'Data berhasil diubah';
+    } else {
+      $result = false;
     }
 
     $data = array();
