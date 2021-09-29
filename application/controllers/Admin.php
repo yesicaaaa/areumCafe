@@ -150,8 +150,10 @@ class Admin extends CI_Controller
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
       'pegawai' => $this->am->getPegawaiRow($this->input->get('id_user')),
+      'detailPegawai' => $this->db->get_where('user_detail', ['id_user' => $this->input->get('id_user')])->result_array(),
       'title' => 'Detail Pegawai | Areum Cafe',
-      'css'   => 'admin.css'
+      'css'   => 'admin.css',
+      'js'    => 'detailPegawai.js'
     ];
 
     if(!$data['pegawai']) {
@@ -792,5 +794,27 @@ class Admin extends CI_Controller
     $data['res_message'] = $message;
 
     echo json_encode($data);
+  }
+
+  function deleteDetailPegawai()
+  {
+    if(isset($_POST['id_user'])) {
+      $this->ajax = true;
+      $id_user = explode(",", $this->input->post('id_user'));
+      $res = $this->am->deleteDetailPegawai($id_user);
+
+      if($res) {
+        $result = true;
+        $message = 'Data berhasil dihapus';
+      } else {
+        $result = false;
+        $message = 'Data gagal dihapus';
+      }
+
+      $data = array();
+      $data['res_status'] = $result;
+      $data['res_message'] = $message;
+      echo json_encode($data);
+    }
   }
 }

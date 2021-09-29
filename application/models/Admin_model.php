@@ -444,4 +444,17 @@ class Admin_model extends CI_Model
             WHERE `u`.`id_user` = $id";
     return $this->db->query($sql)->row_array();
   }
+
+
+  function deleteDetailPegawai($id)
+  {
+    $this->db->where_in('id', $id);
+    $this->db->delete('user_detail');
+
+    if ($this->db->affected_rows() > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

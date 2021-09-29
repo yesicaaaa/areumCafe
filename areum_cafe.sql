@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2021 at 08:03 AM
+-- Generation Time: Sep 29, 2021 at 11:16 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.14
 
@@ -47,10 +47,10 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `showPegawai` ()  NO SQL
 BEGIN
-	SELECT u.*, ha.*, ud.id, ud.nama_saudara, ud.deskripsi, ud.date_created, ud.date_updated FROM user as u
+	SELECT u.*, ha.* FROM user as u
     JOIN hak_akses as ha on ha.id_hak_akses = u.hak_akses
-    LEFT JOIN user_detail as ud on ud.id_user = u.id_user
-    WHERE u.hak_akses != 1;
+    WHERE u.hak_akses != 1
+    ORDER BY u.nama ASC;
 END$$
 
 DELIMITER ;
@@ -335,7 +335,7 @@ INSERT INTO `user` (`id_user`, `nama`, `email`, `password`, `hak_akses`, `deskri
 (2, 'Pebi Riyani', 'pebi@gmail.com', '$2y$10$UiE4AyszD5JzRApTFjL/5uaHqKARFdVGv8RzGf3stwZ9p/4cmjvta', 2, 'Anak ke-2', '2021-06-18', NULL),
 (3, 'Ajeng Maelani', 'ajeng@gmail.com', '$2y$10$Vqw9Ls17OhZS/Gyju7e3iuWFSCWI4ah2jzmqjTgKZT6OKXCz2K31.', 3, 'Anak ke-1', '2021-06-18', NULL),
 (4, 'Nadia Damayanti', 'nadia@gmail.com', '$2y$10$gZNH7lezUm3NVnJ6f7mAw.Fj/efg7/QRoX2aFR7JZ2VDbxjItZeKa', 2, 'Anak ke-1', '2021-06-21', NULL),
-(7, 'Alma Damayanti', 'almaa@gmail.com', '$2y$10$o/5XHm9jGrbGGUZmXyxFbevqUdch726PecLO1SEQaeafrpsdvAghK', 3, 'Anak ke-1', '2021-06-21', '2021-09-29 11:10:32');
+(7, 'Alma Damayanti', 'almaa@gmail.com', '$2y$10$o/5XHm9jGrbGGUZmXyxFbevqUdch726PecLO1SEQaeafrpsdvAghK', 3, 'Anak ke-1', '2021-06-21', '2021-09-29 16:16:01');
 
 -- --------------------------------------------------------
 
@@ -351,13 +351,6 @@ CREATE TABLE `user_detail` (
   `date_created` date NOT NULL,
   `date_updated` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `user_detail`
---
-
-INSERT INTO `user_detail` (`id`, `id_user`, `nama_saudara`, `deskripsi`, `date_created`, `date_updated`) VALUES
-(42, 7, 'Keisha Rizkya', 'Anak ke-2', '2021-09-29', NULL);
 
 --
 -- Indexes for dumped tables
@@ -456,7 +449,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_detail`
 --
 ALTER TABLE `user_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- Constraints for dumped tables
