@@ -146,6 +146,7 @@ function deletePegawai() {
 }
 
 function onEdit() {
+  var base_url = 'http://localhost/areumCafe/';
   var id_user = $('input:checkbox[name=id]:checked').map(function(){return $(this).data('iduser');}).get();
 
   if(id_user.length == 1) {

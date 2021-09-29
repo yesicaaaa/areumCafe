@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 07, 2021 at 11:06 AM
+-- Generation Time: Sep 29, 2021 at 08:03 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.14
 
@@ -45,14 +45,12 @@ BEGIN
     WHERE id_user = editId_user;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `showPegawai` (IN `batas` INT, IN `mulai` INT, IN `keyword` VARCHAR(128))  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `showPegawai` ()  NO SQL
 BEGIN
-	SELECT * FROM user
-    JOIN hak_akses on hak_akses.id_hak_akses = user.hak_akses
-    WHERE user.nama LIKE keyword
-    OR user.email LIKE keyword
-    OR hak_akses.nama_akses LIKE keyword
-    LIMIT mulai, batas;
+	SELECT u.*, ha.*, ud.id, ud.nama_saudara, ud.deskripsi, ud.date_created, ud.date_updated FROM user as u
+    JOIN hak_akses as ha on ha.id_hak_akses = u.hak_akses
+    LEFT JOIN user_detail as ud on ud.id_user = u.id_user
+    WHERE u.hak_akses != 1;
 END$$
 
 DELIMITER ;
@@ -306,8 +304,6 @@ CREATE TABLE `transaksi` (
 INSERT INTO `transaksi` (`id_transaksi`, `id_pegawai`, `id_pelanggan`, `tanggal_transaksi`, `total_harga`, `total_bayar`, `kembalian`) VALUES
 ('TR1624604826', 2, 1624521876, '2021-06-25 14:07:06', 39050, 100000, 60950),
 ('TR1624609653', 2, 1624609519, '2021-06-25 15:27:33', 31900, 50000, 18100),
-('TR1624848394', 8, 1624609243, '2021-06-28 09:46:34', 59400, 100000, 40600),
-('TR1624848413', 8, 1624843842, '2021-06-28 09:46:53', 117700, 200000, 82300),
 ('TR1624958126', 2, 1624950961, '2021-06-29 16:15:26', 225500, 300000, 74500),
 ('TR1624958198', 2, 1624953565, '2021-06-29 16:16:38', 50600, 60000, 9400),
 ('TR1625111479', 2, 1624960439, '2021-07-01 10:51:19', 935550, 950000, 14450),
@@ -325,21 +321,43 @@ CREATE TABLE `user` (
   `email` varchar(128) NOT NULL,
   `password` varchar(255) NOT NULL,
   `hak_akses` int(11) NOT NULL,
-  `date_created` date NOT NULL
+  `deskripsi` varchar(255) NOT NULL,
+  `date_created` date NOT NULL,
+  `date_updated` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id_user`, `nama`, `email`, `password`, `hak_akses`, `date_created`) VALUES
-(1, 'Yesica Anggraeni', 'yesica@gmail.com', '$2y$10$PTlG0JDrQAqIaxAfTe6lceSDnkpl/EdfCL09JdMtWVCU3oS9/v/9S', 1, '2021-06-18'),
-(2, 'Pebi Riyani', 'pebi@gmail.com', '$2y$10$UiE4AyszD5JzRApTFjL/5uaHqKARFdVGv8RzGf3stwZ9p/4cmjvta', 2, '2021-06-18'),
-(3, 'Ajeng Maelani', 'ajeng@gmail.com', '$2y$10$Vqw9Ls17OhZS/Gyju7e3iuWFSCWI4ah2jzmqjTgKZT6OKXCz2K31.', 3, '2021-06-18'),
-(4, 'Nadia Damayanti', 'nadia@gmail.com', '$2y$10$gZNH7lezUm3NVnJ6f7mAw.Fj/efg7/QRoX2aFR7JZ2VDbxjItZeKa', 2, '2021-06-21'),
-(7, 'Alma Damayanti', 'almaa@gmail.com', '$2y$10$o/5XHm9jGrbGGUZmXyxFbevqUdch726PecLO1SEQaeafrpsdvAghK', 3, '2021-06-21'),
-(8, 'Raya Fitriani', 'raya@gmail.com', '$2y$10$Nf5gR7mbotNE/F5Z3a97/OVMH14Zy2YsPcjub/FjJTPHotjhoUoPu', 2, '2021-06-21'),
-(9, 'Willyan Wilrandi', 'willyan@gmail.com', '$2y$10$ZW0YwCiKL0jwNhZxyC8rV.Unm.XwcEW.0.yPlNK/Ep2i6dTlmOWeq', 2, '2021-09-01');
+INSERT INTO `user` (`id_user`, `nama`, `email`, `password`, `hak_akses`, `deskripsi`, `date_created`, `date_updated`) VALUES
+(1, 'Yesica Anggraeni', 'yesica@gmail.com', '$2y$10$PTlG0JDrQAqIaxAfTe6lceSDnkpl/EdfCL09JdMtWVCU3oS9/v/9S', 1, 'Anak ke-3', '2021-06-18', NULL),
+(2, 'Pebi Riyani', 'pebi@gmail.com', '$2y$10$UiE4AyszD5JzRApTFjL/5uaHqKARFdVGv8RzGf3stwZ9p/4cmjvta', 2, 'Anak ke-2', '2021-06-18', NULL),
+(3, 'Ajeng Maelani', 'ajeng@gmail.com', '$2y$10$Vqw9Ls17OhZS/Gyju7e3iuWFSCWI4ah2jzmqjTgKZT6OKXCz2K31.', 3, 'Anak ke-1', '2021-06-18', NULL),
+(4, 'Nadia Damayanti', 'nadia@gmail.com', '$2y$10$gZNH7lezUm3NVnJ6f7mAw.Fj/efg7/QRoX2aFR7JZ2VDbxjItZeKa', 2, 'Anak ke-1', '2021-06-21', NULL),
+(7, 'Alma Damayanti', 'almaa@gmail.com', '$2y$10$o/5XHm9jGrbGGUZmXyxFbevqUdch726PecLO1SEQaeafrpsdvAghK', 3, 'Anak ke-1', '2021-06-21', '2021-09-29 11:10:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_detail`
+--
+
+CREATE TABLE `user_detail` (
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `nama_saudara` varchar(128) NOT NULL,
+  `deskripsi` varchar(128) NOT NULL,
+  `date_created` date NOT NULL,
+  `date_updated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user_detail`
+--
+
+INSERT INTO `user_detail` (`id`, `id_user`, `nama_saudara`, `deskripsi`, `date_created`, `date_updated`) VALUES
+(42, 7, 'Keisha Rizkya', 'Anak ke-2', '2021-09-29', NULL);
 
 --
 -- Indexes for dumped tables
@@ -394,6 +412,13 @@ ALTER TABLE `user`
   ADD KEY `hak_akses` (`hak_akses`);
 
 --
+-- Indexes for table `user_detail`
+--
+ALTER TABLE `user_detail`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_user` (`id_user`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -425,7 +450,13 @@ ALTER TABLE `total_pesanan`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT for table `user_detail`
+--
+ALTER TABLE `user_detail`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- Constraints for dumped tables
@@ -456,6 +487,12 @@ ALTER TABLE `transaksi`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`hak_akses`) REFERENCES `hak_akses` (`id_hak_akses`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user_detail`
+--
+ALTER TABLE `user_detail`
+  ADD CONSTRAINT `user_detail_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

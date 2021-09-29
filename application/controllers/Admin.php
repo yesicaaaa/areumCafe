@@ -145,10 +145,24 @@ class Admin extends CI_Controller
     $this->load->view('templates/footer', $data);
   }
 
-  function refreshPegawai()
+  function detailPegawai()
   {
-    $this->session->unset_userdata('keyword');
-    redirect('admin/pegawai');
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'pegawai' => $this->am->getPegawaiRow($this->input->get('id_user')),
+      'title' => 'Detail Pegawai | Areum Cafe',
+      'css'   => 'admin.css'
+    ];
+
+    if(!$data['pegawai']) {
+      $this->session->set_flashdata('msg_error', 'Data tidak ditemukan!');
+      redirect('admin/pegawai');
+    }
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/side-navbar', $data);
+    $this->load->view('admin/detail-pegawai', $data);
+    $this->load->view('templates/footer', $data);
   }
 
   function menuCafe()

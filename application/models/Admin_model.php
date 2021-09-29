@@ -435,4 +435,13 @@ class Admin_model extends CI_Model
     $ret['status'] = $status;
     return $ret;
   }
+
+  function getPegawaiRow($id)
+  {
+    $sql = "SELECT *
+            FROM `user` as `u`
+            JOIN `hak_akses` as `ha` ON `ha`.`id_hak_akses` = `u`.`hak_akses`
+            WHERE `u`.`id_user` = $id";
+    return $this->db->query($sql)->row_array();
+  }
 }

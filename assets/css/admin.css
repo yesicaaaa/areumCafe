@@ -369,6 +369,11 @@ label span {
   padding: 15px 0 139px 7px;
 }
 
+.bg-edit-pegawai {
+  background-color: #009788;
+  border: none;
+}
+
 .bg-edit-pegawai:hover {
   color: rgba(255, 255, 255, .6);
 }
@@ -587,4 +592,14 @@ div.dataTables_wrapper div.dataTables_filter label {
 
 .breadcrumb a:hover {
   color: rgba(255, 255, 255, .6) !important;
+}
+
+.detail-pegawai2 {
+  padding-left: 50px;
+  padding-right: 10px;
+}
+
+.detail-pegawai3 {
+  width: 90%;
+  margin-left: 5%;
 }
