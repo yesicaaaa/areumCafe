@@ -31,7 +31,7 @@ class Admin_model extends CI_Model
     $this->db->where_in('id_user', $id);
     $this->db->delete('user');
 
-    if($this->db->affected_rows() > 0) {
+    if ($this->db->affected_rows() > 0) {
       return true;
     } else {
       return false;
@@ -48,7 +48,7 @@ class Admin_model extends CI_Model
 
     $res = $this->db->query($sql);
 
-    if($res->num_rows() > 0) {
+    if ($res->num_rows() > 0) {
       return $res->row();
     } else {
       return false;
@@ -67,49 +67,81 @@ class Admin_model extends CI_Model
     $this->db->query($editPegawaiSP, $data);
   }
 
-  function getDataMenu($limit, $start, $keyword = null)
+  function tambahMenuCafe()
   {
-    $sql = "SELECT * FROM `menu`
-            WHERE `nama` LIKE '%$keyword%'
-            OR `harga` LIKE '$keyword%%'
-            OR `jenis` LIKE '%$keyword%'
-            OR `stok` LIKE '%$keyword%'
-            LIMIT $start, $limit
-          ";
-    return $this->db->query($sql)->result_array();
-  }
+    date_default_timezone_set('Asia/Jakarta');
 
-  function addMenu()
-  {
-    $data = [
+    $status_err = false;
+    $message = 'Data gagal disimpan';
+
+    $foto = $this->_do_uploadMenu();
+    if (!$foto['status']) {
+      $status_err = true;
+      $message = $foto['message'];
+    }
+    $menu = array(
       'nama'  => htmlspecialchars($this->input->post('nama')),
       'harga' => htmlspecialchars($this->input->post('harga')),
       'deskripsi' => htmlspecialchars($this->input->post('deskripsi')),
-      'foto'  => $this->_do_uploadMenu(),
       'jenis' => htmlspecialchars($this->input->post('jenis')),
       'stok'  => htmlspecialchars($this->input->post('stok')),
-      'date_created'  => date('Y-m-d')
-    ];
+      'date_created'  => date('Y-m-d G:i:s'),
+      'foto'  => $foto['file_name']
+    );
 
-    $this->db->insert('menu', $data);
+    $id_menu = 0;
+    if(!$status_err) {
+      $this->db->trans_begin();
+
+      $this->db->insert('menu', $menu);
+      $id_menu = $this->db->insert_id();
+
+      if($this->db->trans_status() === false) {
+        $this->db->trans_rollback();
+        $id_menu = 0;
+      } else {
+        $this->db->trans_commit();
+      }
+    }
+
+    $ret['id_menu'] = $id_menu;
+    $ret['message'] = $message;
+    return $ret;
   }
 
   private function _do_uploadMenu()
   {
+    $filename = str_replace(" ", "_", $this->input->post('nama'));
+    $status = true;
+    $message = '';
+
     $config = [
       'upload_path'   => './assets/img/menu/',
-      'allowed_types' => 'jpg|png',
+      'allowed_types' => 'jpg|png|jpeg',
       'max_size'      => 2048,
       'overwrite'     => true,
-      'file_name'     => $this->input->post('nama')
+      'file_name'     => $filename
     ];
+
     $this->upload->initialize($config);
 
-    if ($this->upload->do_upload('foto')) {
-      return $this->upload->data('file_name');
+    if ($_FILES['foto']['name'] != '') {
+      if (!$this->upload->do_upload('foto')) {
+        $status = false;
+        $message = $this->upload->display_errors();
+      } else {
+        $data = $this->upload->data();
+        $nama_img = $data['file_name'];
+      }
     } else {
-      return 'default.png';
+      $nama_img = 'default.png';
     }
+
+    $res_foto = array();
+    $res_foto['status'] = $status;
+    $res_foto['file_name'] = $nama_img;
+    $res_foto['message'] = $message;
+    return $res_foto;
   }
 
   private function _menuImg_delete($id)
@@ -318,7 +350,7 @@ class Admin_model extends CI_Model
     $sql = "SELECT count(*) as jml 
             FROM `user` 
             WHERE `user`.`email` = '{$email}'";
-    
+
     return $this->db->query($sql)->row()->jml;
   }
 
@@ -340,14 +372,14 @@ class Admin_model extends CI_Model
 
     $last_id = $this->db->insert_id();
 
-    if($this->input->post('detailPegawai') != null) {
+    if ($this->input->post('detailPegawai') != null) {
       $detailPeg = $this->input->post('detailPegawai');
       $jml_data = count($detailPeg);
     } else {
       $jml_data = 0;
     }
 
-    for($i = 0; $i < $jml_data; $i++) {
+    for ($i = 0; $i < $jml_data; $i++) {
       $detailPegawai = [
         'id_user' => $last_id,
         'nama_saudara'  => $detailPeg[$i]['nama_saudara'],
@@ -359,10 +391,10 @@ class Admin_model extends CI_Model
 
     $this->db->trans_complete();
 
-    if($this->db->trans_status() === false) {
+    if ($this->db->trans_status() === false) {
       $this->db->trans_rollback();
       $last_id = 0;
-    }else{
+    } else {
       $this->db->trans_commit();
     }
 
@@ -394,21 +426,21 @@ class Admin_model extends CI_Model
     $this->db->where('id_user', $this->input->post('id_user'));
     $this->db->update('user', $dataPegawai);
 
-    if($this->input->post('detailPegawai') != null) {
+    if ($this->input->post('detailPegawai') != null) {
       $detailPeg = $this->input->post('detailPegawai');
       $jml_data = count($detailPeg);
     } else {
       $jml_data = 0;
     }
 
-    for($i = 0; $i < $jml_data; $i++) {
-      if($detailPeg[$i]['id_user_detail'] != null) {
+    for ($i = 0; $i < $jml_data; $i++) {
+      if ($detailPeg[$i]['id_user_detail'] != null) {
         $detailPegawai = [
           'id_user'       => $this->input->post('id_user'),
           'nama_saudara'  => $detailPeg[$i]['nama_saudara'],
           'deskripsi'     => $detailPeg[$i]['deskripsi'],
           'date_updated'  => date('Y-m-d G:i:s')
-        ];  
+        ];
 
         $this->db->where('id', $detailPeg[$i]['id_user_detail']);
         $this->db->update('user_detail', $detailPegawai);
@@ -424,7 +456,7 @@ class Admin_model extends CI_Model
       }
     }
 
-    if($this->db->trans_status() === false) {
+    if ($this->db->trans_status() === false) {
       $this->db->trans_rollback();
       $status = 0;
     } else {
@@ -456,5 +488,11 @@ class Admin_model extends CI_Model
     } else {
       return false;
     }
+  }
+
+  function getMenuCafe()
+  {
+    $this->db->order_by('nama', 'ASC');
+    return $this->db->get('menu')->result_array();
   }
 }

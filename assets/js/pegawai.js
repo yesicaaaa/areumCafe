@@ -9,6 +9,7 @@ $(document).ready(function() {
   //     cancelButtonColor: '#C9CCD5'
   //   });
   // });
+  var base_url = 'http://localhost/areumCafe/';
 
   $('.pegawai').DataTable({
     "ordering": false
@@ -41,6 +42,10 @@ $(document).ready(function() {
   $('.edit-pegawai').click(function() {
     onEdit();
   });
+
+  $('.tambah-pegawai').click(function() {
+    window.location = base_url + 'admin/tambahPegawai';
+  })
 });
 
 function checkRow(row) {

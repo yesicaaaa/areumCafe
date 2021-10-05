@@ -9,6 +9,9 @@
       <button type="button" class="btn btn-danger delete-pegawai"><i class="fa fa-fw fa-minus-circle"></i> Hapus</button>
     </div>
     <div class="col-md-2">
+      <button type="button" class="btn btn-edit tambah-pegawai"><i class="fa fa-fw fa-plus"></i> Tambah</button>
+    </div>
+    <div class="col-md-2">
       <button type="button" class="btn btn-edit edit-pegawai"><i class="fa fa-fw fa-edit"></i> Edit</button>
     </div>
     <div class="col-md-2">

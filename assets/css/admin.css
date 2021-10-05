@@ -20,12 +20,17 @@ nav {
   padding: 0;
 }
 
+.navbar-admin {
+  margin-top: -95px;
+  margin-bottom: 29px;
+}
+
 .navbar-brand {
   font-family: 'Sacramento', cursive;
   font-size: 40px;
   padding: 0;
   color: white !important;
-  position: sticky !important;
+  margin-left: 15px;
 }
 
 .navbar-brand span {
@@ -96,7 +101,6 @@ nav {
   background-color: #e3e8e9;
   margin-left: -7px;
   padding: 10px 0 2px 10px;
-  margin-top: -16px;
 }
 
 .form-tambah h6 {
@@ -127,8 +131,9 @@ nav {
 
 .form-pegawai button {
   padding: 5px;
-  margin: -20px 0 20px 901px;
+  margin: 15px 0 20px 1px;
   font-size: 15px;
+  border-radius: 2px;
 }
 
 .alert {
@@ -154,6 +159,7 @@ label span {
   width: 78%;
   margin-left: 11px;
   height: 32px;
+  font-size: 12px;
   margin-top: 10px;
 }
 
@@ -256,11 +262,13 @@ label span {
 
 .btn-excel {
   border-radius: 0;
-  margin-left: -83px;
+  margin-left: -232px;
+  padding: 4px;
 }
 
 .btn-pdf {
-  margin-left: -124px;
+  margin-left: -292px;
+  padding: 4px;
   border-radius: 0;
 }
 
@@ -351,14 +359,16 @@ label span {
   margin-top: -50px;
 }
 
-.button-simpan-pegawai button {
+.button-simpan-pegawai button,
+.btn-tambah-menu button {
   padding: 7px 10px;
   font-size: 14px;
   background:linear-gradient(90deg, #b67127 20%, #cf7311 47%, #e68e36 72%, #b67127 100%);
   border: none;
 }
 
-.button-simpan-pegawai button:hover {
+.button-simpan-pegawai button:hover,
+.btn-tambah-menu button:hover {
   color: rgba(255, 255, 255, .6);
 }
 
@@ -550,9 +560,11 @@ label span {
   color: white;
 }
 
-.delete-pegawai {
+.delete-pegawai,
+.delete-menu {
   border-radius: 0;
-  width: 86%;
+  width: 65%;
+  padding: 4px;
 }
 
 .success {
@@ -579,10 +591,16 @@ div.dataTables_wrapper div.dataTables_filter label {
 
 .btn-edit {
   background-color: #009688;
-  margin-left: -42px;
+  margin-left: -78px;
   color: white;
   border-radius: 0;
-  width: 86%;
+  width: 65%;
+  padding: 4px;
+}
+
+.edit-pegawai,
+.edit-menu {
+  margin-left: -155px;
 }
 
 .btn-edit:hover {
@@ -632,6 +650,11 @@ div.dataTables_wrapper div.dataTables_filter label {
   margin-top: 95px;
 }
 
-.idUser input {
+.idUser input,
+.checkbox-menucafe{
   margin-left: 18px !important;
+}
+
+#jenis-error {
+  margin-left: 76px;
 }

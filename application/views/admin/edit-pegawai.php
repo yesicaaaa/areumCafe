@@ -5,7 +5,7 @@
       <li class="breadcrumb-item active" aria-current="page">Edit Pegawai</li>
     </ol>
   </nav>
-  <div class="form-tambah">
+  <div class="form-tambah" style="margin-top:-16px !important">
     <h6>Edit Pegawai</h6>
     <form id="form-add" class="form-pegawai">
       <input type="hidden" name="id_user" id="inputIdUser" value="<?= $row->id_user ?>">

@@ -88,23 +88,23 @@ class Admin extends CI_Controller
 
   function pegawai_delete()
   {
-    if(isset($_POST['id_user'])) {
+    if (isset($_POST['id_user'])) {
       $this->ajax = true;
       $user_id = explode(',', $this->input->post('id_user'));
       $res = $this->am->pegawai_delete($user_id);
 
-      if($res) {
+      if ($res) {
         $result = true;
         $message = 'Data berhasil dihapus';
       } else {
         $result = false;
         $message = 'Data gagal dihapus';
       }
-      
+
       $data = array();
       $data['res_status'] = $result;
       $data['res_message'] = $message;
-      echo json_encode($data); 
+      echo json_encode($data);
     }
   }
 
@@ -120,7 +120,7 @@ class Admin extends CI_Controller
   {
     $id_user = $this->input->get('id_user');
 
-    if($id_user == '' || $id_user == '0') {
+    if ($id_user == '' || $id_user == '0') {
       $this->session->set_flashdata('msg_error', 'Data tidak ditemukan!');
       redirect('admin/pegawai');
     }
@@ -134,7 +134,7 @@ class Admin extends CI_Controller
       'js'    => 'editPegawai.js'
     ];
 
-    if(!$data['row']) {
+    if (!$data['row']) {
       $this->session->set_flashdata('msg_error', 'Data tidak ditemukan!');
       redirect('admin/pegawai');
     }
@@ -156,7 +156,7 @@ class Admin extends CI_Controller
       'js'    => 'detailPegawai.js'
     ];
 
-    if(!$data['pegawai']) {
+    if (!$data['pegawai']) {
       $this->session->set_flashdata('msg_error', 'Data tidak ditemukan!');
       redirect('admin/pegawai');
     }
@@ -171,52 +171,51 @@ class Admin extends CI_Controller
   {
     $data = [
       'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'menu'  => $this->am->getMenuCafe(),
       'title' => 'Menu Cafe | Areum Cafe',
       'css'   => 'admin.css',
       'js'    => 'menuCafe.js'
     ];
-    if ($this->input->post('cari')) {
-      $data['keyword'] = $this->input->post('keyword');
-      $this->session->set_userdata('keyword', $data['keyword']);
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/side-navbar', $data);
+    $this->load->view('admin/menu-cafe', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function tambahMenu()
+  {
+    $data = [
+      'user'  => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+      'menu'  => $this->db->get('menu')->result_array(),
+      'title' => 'Menu Cafe | Areum Cafe',
+      'css'   => 'admin.css',
+      'js'    => 'tambahMenuCafe.js'
+    ];
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/side-navbar', $data);
+    $this->load->view('admin/tambah-menu-cafe', $data);
+    $this->load->view('templates/footer', $data);
+  }
+
+  function tambahMenuCafe()
+  {
+    $res = $this->am->tambahMenuCafe();
+
+    if($res['id_menu']) {
+      $result = true;
+      $message = 'Data berhasil disimpan';
     } else {
-      $data['keyword'] = $this->session->userdata('keyword');
+      $result = false;
+      $message = $res['message'];
     }
 
-    $config['base_url'] = 'http://localhost/areumCafe/admin/menuCafe';
-    $this->db->like('nama', $data['keyword']);
-    $this->db->or_like('harga', $data['keyword']);
-    $this->db->or_like('jenis', $data['keyword']);
-    $this->db->or_like('stok', $data['keyword']);
-    $this->db->from('menu');
-    $config['total_rows'] = $this->db->count_all_results();
-    $data['total_rows'] = $config['total_rows'];
-    $config['per_page'] = 10;
+    $data = array();
+    $data['res_status'] = $result;
+    $data['res_message'] = $message;
 
-    $this->pagination->initialize($config);
-
-    $data['start'] = $this->uri->segment(3);
-    $start = ($data['start'] > 0) ? $data['start'] : 0;
-
-    $data['menu'] = $this->am->getDataMenu($config['per_page'], $start, $data['keyword']);
-
-    if (!$this->input->post('cari')) {
-      $this->form_validation->set_rules('nama', 'Nama Menu', 'required');
-      $this->form_validation->set_rules('harga', 'Harga', 'required');
-      $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
-      $this->form_validation->set_rules('jenis', 'Jenis Menu', 'required');
-      $this->form_validation->set_rules('stok', 'Stok Menu', 'required');
-    }
-
-    if ($this->form_validation->run() == false) {
-      $this->load->view('templates/header', $data);
-      $this->load->view('templates/side-navbar', $data);
-      $this->load->view('admin/menu-cafe', $data);
-      $this->load->view('templates/footer', $data);
-    } else {
-      $this->am->addMenu();
-      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Menu baru berhasil ditambahkan.</div>');
-      redirect('admin/menuCafe');
-    }
+    echo json_encode($data);
   }
 
   function menu_delete()
@@ -235,7 +234,7 @@ class Admin extends CI_Controller
   function getMenuRow()
   {
     $id_menu = $this->input->post('id_menu');
-    $menu = $this->db->get_where('menu', ['id_menu' => $id_menu])->row_array();
+    $menu = $this->db->get_where('menu',  ['id_menu' => $id_menu])->row_array();
 
     echo json_encode($menu);
   }
@@ -782,7 +781,7 @@ class Admin extends CI_Controller
   function editDataPegawai()
   {
     $user = $this->am->editDataPegawai();
-    if($user['status'] == 1) {
+    if ($user['status'] == 1) {
       $result = true;
       $message = 'Data berhasil diubah';
     } else {
@@ -798,12 +797,12 @@ class Admin extends CI_Controller
 
   function deleteDetailPegawai()
   {
-    if(isset($_POST['id_user'])) {
+    if (isset($_POST['id_user'])) {
       $this->ajax = true;
       $id_user = explode(",", $this->input->post('id_user'));
       $res = $this->am->deleteDetailPegawai($id_user);
 
-      if($res) {
+      if ($res) {
         $result = true;
         $message = 'Data berhasil dihapus';
       } else {

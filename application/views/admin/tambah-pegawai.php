@@ -79,12 +79,8 @@
   </div>
   <button type="button" class="btn btn-success btn-tambah-inputan add-more"><i class="fa fa-fw fa-plus"></i> Tambah Inputan</button>
   <div class="button-simpan-pegawai">
-    <button class="btn btn-success" id="btn_batal_input">Batal</button>
+    <button type="button" class="btn btn-success" id="btn_batal_input">Batal</button>
     <button type="button" class="btn btn-success" id="btn_simpan_pegawai"><i class="fa fa-fw fa-save"></i> Simpan</button>
   </div>
   </form>
 </div>
-
-<script>
-  var base_url = 'http://localhost/areumCafe/';
-</script>

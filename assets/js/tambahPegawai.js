@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  var base_url = 'http://localhost/areumCafe/';
   $('.add-more').on('click', function() {
     var html = $('.copy-inputan').html();
     $('.after-add-more').after(html);
@@ -10,6 +11,10 @@ $(document).ready(function() {
 
   $('#btn_simpan_pegawai').click(function() {
     onSavePegawai();
+  });
+
+  $('#btn_batal_input').click(function() {
+    window.location = base_url + 'admin/pegawai';
   });
 
   $('#form-add').validate({
@@ -67,7 +72,7 @@ $(document).ready(function() {
       errorPlacement: function(error, element){
         error.insertAfter(element);
       }
-    })  ;
+    });
   });
 
   function onSavePegawai() {

@@ -1,13 +1,9 @@
-<nav class="navbar sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="<?= base_url() ?>admin">Areum <span>Cafe</span></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <p><?= $user['nama'] ?></p>
-  </div>
-</nav>
 <div class="sidenav">
+  <nav class="navbar navbar-admin">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="<?= base_url() ?>admin">Areum <span>Cafe</span></a>
+    </div>
+  </nav>
   <div>
     <div class="divider-first"></div>
     <ul class="nav nav-pills nav-stacked">
@@ -16,10 +12,6 @@
     <div class="divider"></div>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="<?= base_url('admin/pegawai'); ?>"><i class="fa fa-fw fa-users"></i><span>Pegawai</span></a></li>
-    </ul>
-    <div class="divider"></div>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="<?= base_url('admin/tambahPegawai'); ?>"><i class="fa fa-fw fa-plus"></i><span>Tambah  Pegawai</span></a></li>
     </ul>
     <div class="divider"></div>
     <ul class="nav nav-pills nav-stacked">
