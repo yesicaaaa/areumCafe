@@ -40,7 +40,7 @@
         <?php foreach ($menu as $m) : ?>
           <tr>
             <td>
-              <input type="checkbox" name="id[]" class="checkbox-menucafe" value="<?= $m['id_menu'] ?>">
+              <input type="checkbox" name="id" class="checkbox-menucafe id-checkbox checkpart" data-iduser="<?= $m['id_menu'] ?>">
             </td>
             <td><?= $m['nama'] ?></td>
             <td><?= $m['harga'] ?></td>
@@ -55,6 +55,24 @@
     </tbody>
   </table>
   </form>
+
+  <div class="modal" id="modalDeletePegawai" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Konfirmasi Hapus</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Apakah kamu yakin ingin menghapus data pegawai?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-batal-hapus" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-hapus-pegawai">Hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     var base_url = '<?= base_url(); ?>';

@@ -90,13 +90,13 @@ class Admin_model extends CI_Model
     );
 
     $id_menu = 0;
-    if(!$status_err) {
+    if (!$status_err) {
       $this->db->trans_begin();
 
       $this->db->insert('menu', $menu);
       $id_menu = $this->db->insert_id();
 
-      if($this->db->trans_status() === false) {
+      if ($this->db->trans_status() === false) {
         $this->db->trans_rollback();
         $id_menu = 0;
       } else {
@@ -144,19 +144,28 @@ class Admin_model extends CI_Model
     return $res_foto;
   }
 
-  private function _menuImg_delete($id)
+  private function _menuImg_delete($id_menu)
   {
-    $menuImg = $this->db->get_where('menu', ['id_menu' => $id])->row_array();
+    $menuImg = $this->db->get_where('menu', ['id_menu' => $id_menu])->row_array();
     if ($menuImg['foto'] != 'default.png') {
       $filename = explode('.', $menuImg['foto'])[0];
       return array_map('unlink', glob(FCPATH .  "assets/img/menu/$filename.*"));
     }
   }
 
-  function menu_delete($id)
+  function hapusMenuCafe($id_menu)
   {
-    $this->_menuImg_delete($id);
-    return $this->db->delete('menu', ['id_menu' => $id]);
+    foreach($id_menu as $id) {
+      $this->_menuImg_delete($id);
+    }
+    $this->db->where_in('id_menu', $id_menu);
+    $this->db->delete('menu');
+
+    if($this->db->affected_rows() > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   function editMenu()

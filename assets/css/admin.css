@@ -658,3 +658,11 @@ div.dataTables_wrapper div.dataTables_filter label {
 #jenis-error {
   margin-left: 76px;
 }
+
+.col-sm-10 textarea {
+  font-size: 12px !important;
+}
+
+div.dataTables_wrapper div.dataTables_length label {
+  margin-left: 10px;
+}

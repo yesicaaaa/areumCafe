@@ -218,17 +218,25 @@ class Admin extends CI_Controller
     echo json_encode($data);
   }
 
-  function menu_delete()
+  function hapusMenuCafe()
   {
-    if ($_POST['id'] != null) {
-      foreach ($_POST['id'] as $id) {
-        $this->am->menu_delete($id);
+    if(isset($_POST['id_menu'])) {
+      $id_menu = explode(',', $this->input->post('id_menu'));
+      $res = $this->am->hapusMenuCafe($id_menu);
+
+      if($res) {
+        $result = true;
+        $message = 'Data berhasil dihapus';
+      } else {
+        $result = false;
+        $message = 'Data gagal dihapus';
       }
-      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Menu berhasil dihapus.</div>');
-    } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak ada data yang dipilih!</div>');
+      $data = array();
+      $data['res_status'] = $result;
+      $data['res_message'] = $message;
+  
+      echo json_encode($data);
     }
-    redirect('admin/menuCafe');
   }
 
   function getMenuRow()

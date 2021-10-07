@@ -12,7 +12,8 @@ $(document).ready(function() {
   var base_url = 'http://localhost/areumCafe/';
 
   $('.pegawai').DataTable({
-    "ordering": false
+    "ordering": false,
+    "lengthChange": false
   });
 
   $('.delete-pegawai').click(function() {
@@ -81,7 +82,7 @@ function konfirmasiHapus() {
   } else {
     $.gritter.add({
       title: 'Proses Error',
-      text: 'Tidak ada data yang dipilih',
+      text: 'Tidak ada data yang dipilih!',
       class_name: 'with-icon times-circle danger'
     });
   }
